@@ -1,0 +1,7 @@
+---
+- name: Manage cybera-dotfiles git repository
+  git:
+    repo: https://github.com/cybera/cybera-dotfiles
+    dest: /root/cybera-dotfiles
+    version: master
+  notify: Install dotfiles

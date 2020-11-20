@@ -1,0 +1,88 @@
+---
+- name: Ensure iptables is installed
+  package:
+    name: iptables
+    state: present
+
+- name: Allow IPv4 traffic to lo
+  iptables:
+    chain: INPUT
+    in_interface: lo
+    ip_version: ipv4
+    jump: ACCEPT
+
+- name: Allow IPv6 traffic to lo
+  iptables:
+    chain: INPUT
+    in_interface: lo
+    ip_version: ipv6
+    jump: ACCEPT
+
+- name: Accept all IPv6 ICMP
+  iptables:
+    chain: INPUT
+    protocol: ipv6-icmp
+    ip_version: ipv6
+    jump: ACCEPT
+
+- name: Allow established traffic from IPv4
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    ip_version: ipv4
+    jump: ACCEPT
+
+- name: Allow established traffic from IPv6
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    ip_version: ipv6
+    jump: ACCEPT
+
+- name: Allow traffic from trusted IPv4 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv4
+    jump: ACCEPT
+  loop: "{{ cybera_networks_ipv4_trusted }}"
+
+- name: Allow traffic from trusted IPv6 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv6
+    jump: ACCEPT
+  loop: "{{ cybera_networks_ipv6_trusted }}"
+
+- name: Deny traffic from untrusted IPv4 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv4
+    jump: DENY
+  loop: "{{ cybera_networks_ipv4_untrusted }}"
+
+- name: Deny traffic from untrusted IPv6 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv6
+    jump: DENY
+  loop: "{{ cybera_networks_ipv6_untrusted }}"
+
+- name: Drop all other IPv4 traffic
+  iptables:
+    chain: INPUT
+    ip_version: ipv4
+    policy: DROP
+
+- name: Drop all other IPv6 traffic
+  iptables:
+    chain: INPUT
+    ip_version: ipv6
+    policy: DROP

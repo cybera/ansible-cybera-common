@@ -2,6 +2,9 @@
 - name: Converge
   hosts: all
   tasks:
-    - name: "Include ansible-cybera-common"
+    - name: Include test data
+      include_vars: vars.yml
+
+    - name: Include ansible-cybera-common
       include_role:
         name: "ansible-cybera-common"

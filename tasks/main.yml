@@ -1,1 +1,36 @@
 ---
+- name: Manage acng
+  include: acng.yml
+  when: ansible_os_family == "Debian"
+
+- name: Refresh package cache
+  package:
+    update_cache: yes
+
+- name: Manage iptables
+  include: iptables.yml
+
+- name: Manage base packages
+  include: packages.yml
+
+- name: Manage system users
+  include: users.yml
+
+- name: Manage SSH keys
+  include: ssh.yml
+
+- name: Manage dotfiles
+  include: dotfiles.yml
+
+- name: Manage IPv6 settings
+  include: ipv6.yml
+
+- name: Manage systemd
+  include: systemd.yml
+
+- name: Manage ubuntu quirks
+  include: ubuntu.yml
+  when: ansible_os_family == "Debian"
+
+- name: Manage automatic security updates
+  include: security_updates.yml

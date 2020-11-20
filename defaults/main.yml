@@ -1,2 +1,60 @@
 ---
-# defaults file for ansible-cybera-common
+# Set these values to a list of CIDR subnets.
+#
+# Example:
+#   cybera_networks_ipv4_trusted:
+#     - 192.168.255.0/24
+cybera_networks_ipv4_trusted: []
+cybera_networks_ipv4_untrusted: []
+cybera_networks_ipv6_trusted: []
+cybera_networks_ipv6_untrusted: []
+
+# Set these to a dict of packages which should be
+# installed or uninstalled on all system.
+#
+# Example:
+#   cybera_packages_debian:
+#     git: latest
+#     apport: present
+cybera_packages_debian: {}
+cybera_packages_redhat: {}
+
+# Set this to an acng server for Debian-based systems.
+#
+# Example:
+#   cybera_acng_server: "acng-yyc.cloud.cybera.ca"
+cybera_acng_server: ""
+
+# Set this to a dict/hash of SSH keys to deploy to servers.
+# It's best to set this in the global "all" group vars.
+#
+# Example:
+#   cybera_ssh_public_keys:
+#     joe:
+#       state: present
+#       key: ...
+cybera_ssh_public_keys: {}
+
+# Set this to a dict/hash of system users and the valid
+# SSH keys which can log in as this user.
+# It's best to set this in a per-role/group group var.
+#
+# Example:
+#   cybera_ssh_authorized_keys:
+#     - user: root
+#       ssh_keys: ['joe']
+cybera_ssh_authorized_keys: {}
+
+# Set this to a dict/hash of users that should be
+# configured on the system.
+#
+# Example:
+#   cybera_system_users:
+#     jdoe:
+#       state: present
+#       uid: 1001
+#       gid: 1001
+#       shell: /bin/bash
+#       password: '*'
+#       create_home: true
+cybera_system_users: {}

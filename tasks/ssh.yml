@@ -1,0 +1,9 @@
+---
+- name: Manage SSH key access for configured users
+  ansible.posix.authorized_key:
+    user: "{{ item.0.user }}"
+    state: "{{ cybera_ssh_public_keys[item.1]['state'] }}"
+    key: "{{ cybera_ssh_public_keys[item.1]['ssh_key'] }}"
+  with_subelements:
+    - "{{ cybera_ssh_authorized_keys }}"
+    - ssh_keys

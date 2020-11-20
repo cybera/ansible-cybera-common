@@ -1,0 +1,10 @@
+---
+- name: Configure apt caching on the server
+  copy:
+    dest: '/etc/apt/apt.conf.d/01apt-cacher-ng-proxy'
+    owner: root
+    group: root
+    mode: '0644'
+    content: |
+      Acquire::http { Proxy "http://{{ cybera_acng_server }}:3142"; };
+  when: (cybera_acng_server is defined and cybera_acng_server|length > 0)

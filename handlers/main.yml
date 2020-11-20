@@ -1,2 +1,10 @@
 ---
-# handlers file for ansible-cybera-common
+- name: Install dotfiles
+  shell:
+    cmd: bash create.sh
+    chdir: /root/cybera-dotfiles
+
+- name: Restart journald
+  systemd:
+    name: systemd-journald
+    state: restarted

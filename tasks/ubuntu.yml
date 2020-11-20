@@ -1,0 +1,38 @@
+---
+- name: Remove unneeded update-notifier-common file
+  file:
+    path: /etc/cron.weekly/update-notifier-common
+    state: absent
+
+- name: Remove unneeded /etc/cron.daily/mlocate file
+  file:
+    path: /etc/cron.daily/mlocate
+    state: absent
+
+- name: Remove unneeded /etc/cron.monthly/ieee-data file
+  file:
+    path: /etc/cron.monthly/ieee-data
+    state: absent
+
+- name: Remove unneeded /etc/cron.d/mdadm file
+  file:
+    path: /etc/cron.d/mdadm
+    state: absent
+
+- name: Remove /etc/apt/apt.conf.d/20auto-upgrades.ucf-dist
+  file:
+    path: /etc/apt/apt.conf.d/20auto-upgrades.ucf-dist
+    state: absent
+
+- name: Set CHECK_LOSTFOUND=0 in /etc/default/cron
+  lineinfile:
+    path: /etc/default/cron
+    line: 'CHECK_LOSTFOUND=no'
+
+- name: Configure unattended-upgrades log rotation
+  copy:
+    dest: /etc/logrotate.d/unattended-upgrades
+    owner: root
+    group: root
+    mode: '0644'
+    src: files/ubuntu/unattended-upgrades
