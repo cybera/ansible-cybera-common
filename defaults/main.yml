@@ -1,5 +1,19 @@
 ---
 # Set these values to a list of CIDR subnets.
+# These are meant to be set in group_vars/all and
+# applied "globally" to all hosts.
+#
+# Example:
+#   cybera_networks_ipv4_trusted_global:
+#     - 192.168.255.0/24
+cybera_networks_ipv4_trusted_global: []
+cybera_networks_ipv4_untrusted_global: []
+cybera_networks_ipv6_trusted_global: []
+cybera_networks_ipv6_untrusted_global: []
+
+# Set these values to a list of CIDR subnets.
+# These are meant to be set in a per role/group
+# var file.
 #
 # Example:
 #   cybera_networks_ipv4_trusted:
@@ -11,6 +25,20 @@ cybera_networks_ipv6_untrusted: []
 
 # Set these to a dict of packages which should be
 # installed or uninstalled on all system.
+# These are meant to be set in group_vars/all and
+# applied "globally" to all hosts.
+#
+# Example:
+#   cybera_packages_debian_global:
+#     git: latest
+#     apport: present
+cybera_packages_debian_global: {}
+cybera_packages_redhat_global: {}
+
+# Set these to a dict of packages which should be
+# installed or uninstalled on all system.
+# These are meant to be set in a per role/group
+# var file.
 #
 # Example:
 #   cybera_packages_debian:
@@ -26,7 +54,10 @@ cybera_packages_redhat: {}
 cybera_acng_server: ""
 
 # Set this to a dict/hash of SSH keys to deploy to servers.
-# It's best to set this in the global "all" group vars.
+# This is meant to be set in group_vars/all and
+# available "globally" to all hosts.
+# This does not mean that the SSH keys will be deployed to
+# all hosts.
 #
 # Example:
 #   cybera_ssh_public_keys:
@@ -37,11 +68,32 @@ cybera_ssh_public_keys: {}
 
 # Set this to a dict/hash of system users and the valid
 # SSH keys which can log in as this user.
-# It's best to set this in a per-role/group group var.
+#
+# The values of ssh_keys correspond to the key you defined
+# in cybera_ssh_public_keys.
+#
+# This is meant to be set in group_vars/all and
+# applied "globally" to all hosts.
+#
+# Example:
+#   cybera_ssh_authorized_keys_global:
+#     root:
+#       user: 'root'
+#       ssh_keys: ['joe']
+cybera_ssh_authorized_keys_global: {}
+
+# Set this to a dict/hash of system users and the valid
+# SSH keys which can log in as this user.
+#
+# The values of ssh_keys correspond to the key you defined
+# in cybera_ssh_public_keys.
+#
+# This is meant to be set in a per role/group var file.
 #
 # Example:
 #   cybera_ssh_authorized_keys:
-#     - user: root
+#     root:
+#       user: 'root'
 #       ssh_keys: ['joe']
 cybera_ssh_authorized_keys: {}
 

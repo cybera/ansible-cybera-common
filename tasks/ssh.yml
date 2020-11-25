@@ -5,5 +5,5 @@
     state: "{{ cybera_ssh_public_keys[item.1]['state'] }}"
     key: "{{ cybera_ssh_public_keys[item.1]['ssh_key'] }}"
   with_subelements:
-    - "{{ cybera_ssh_authorized_keys }}"
+    - "{{ cybera_ssh_authorized_keys_global | combine(cybera_ssh_authorized_keys, list_merge='append', recursive=True) }}"
     - ssh_keys

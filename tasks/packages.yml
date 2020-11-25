@@ -1,10 +1,24 @@
 ---
+- name: Install globally common packages (Debian)
+  apt:
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
+  loop: "{{ cybera_packages_debian_global|dict2items }}"
+  when: ansible_os_family == "Debian"
+
 - name: Install common packages (Debian)
   apt:
     name: "{{ item.key }}"
     state: "{{ item.value }}"
   loop: "{{ cybera_packages_debian|dict2items }}"
   when: ansible_os_family == "Debian"
+
+- name: Install globally common packages (RedHat)
+  yum:
+    name: "{{ item.key }}"
+    state: "{{ item.value }}"
+  loop: "{{ cybera_packages_redhat_global|dict2items }}"
+  when: ansible_os_family == "RedHat"
 
 - name: Install common packages (RedHat)
   yum:

@@ -1,33 +1,50 @@
 ---
 # These variables are test values used for testing
 # the ansible-cybera-common playbook with Molecule.
+cybera_networks_ipv4_trusted_global:
+  - 192.168.1.0/24
+
 cybera_networks_ipv4_trusted:
   - 172.17.0.0/16
 
-cybera_packages_debian:
+cybera_packages_debian_global:
   cron: present
+
+cybera_packages_debian:
   curl: present
   git:  present
 
-cybera_packages_redhat:
+cybera_packages_redhat_global:
   curl:  present
+
+cybera_packages_redhat:
   which: present
 
 cybera_acng_server: "acng-yyc.cloud.cybera.ca"
 
 cybera_ssh_public_keys:
-  joe:
+  foo_key:
     state: present
-    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDHkA8jnZOoJM6Qw/IkcjOlKJ63CARlV0TQ9QsJEe47Bh5u7o1hDN2RXygnB7FHbKkDJaG/XaUHCQ7NMB4kEDtyeFmHhLKD661YF3IFbrQiW9pKNMC4AbUPDJBgBVctLj98hZg/GJLX/NrLQHAL3n7jhgNHZ9k1dNBGkZSSOBv38mGI8Ro8WlpMorYGLhxdz8cu3r/v36giVbBf2sCF79+CHJDSJnmO6yJ5K3K44SX3+IWcRB+pxm6OJXLXiwvE7mFkxVyuQHR1XrMHNC8hE5Vdf05RwRqyNm3j0by2upmBevvJasLE54M3OJiNxwhyhMqe9JIhBCUxENZYz337ZIsD jtopjian"
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAbGlbaY0OvmEwoEX6KVwLBe9gOjiuAt6zxf2qdWMbc8Q3X2swom4xk65R9pankz0afQs2fa/oxwJO1FL61voh523EILIlDNARE8XdsoD9CVaAMlH4ibaODpUUUyOyR2wOKjuGzGICfKyUFniEWW+3ufohP4FTf/jtu8ahwAOl2iWBpWrC+Dv/gRsxx3AHbXMaJHFT30U+YnacjVTUPupMXahdCqEB16Zm5weYXa5VaFOQBFhoqbGom5BWUOhv2JZULecHJu6XNWW/6OGnijVxf3nH9/aDmEbizuj8tSxL3ZODVupt88NCeuzAOIEc6i6g7d262U+OpUmQEg1AHaA/ foo"
+  bar_key:
+    state: present
+    ssh_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDp/f92WVg0Le++GXkpGUI0Nljh/oE4JqYHpSaMi7I6nt1U2EX3zcZ9hLwoXQLpXgFzWbx1GrdZmFGQkpWEzZorN6D+xpNPxVdT7KhgTrmyC/jlEGSME3qV41i5XGeH4Yjr7rkCnNmlwZ73shqbruyZTnEFQsqN2HwSHb91x5cH5I6/BohSvxxmEnMMXtPM4HLY6bXG+KdRc29Kh5k54LJIV6yCO7Y1B7/GpAgy5fy+dAJN0cDrN6jDEQKTxLKxZRkh3YhN2OviZpwz47HtlSYkHmRlcX3uXKdxcvoLIS8X//15hE7v8ZfiEH2sNd0SZVyEKdYrgmiq6Fhd5PiRQDHL bar"
+
+cybera_ssh_authorized_keys_global:
+  root:
+    user: 'root'
+    ssh_keys: ['foo_key']
 
 cybera_ssh_authorized_keys:
-  - user: root
-    ssh_keys: ['joe']
-  - user: joe
-    ssh_keys: ['joe']
+  root:
+    user: 'root'
+    ssh_keys: ['bar_key']
+  foo:
+    user: 'foo'
+    ssh_keys: ['foo_key']
 
 cybera_system_users:
-  joe:
+  foo:
     state: present
     uid: 1001
     gid: 1001

@@ -14,7 +14,8 @@
     - name: Verify SSH keys are installed
       assert:
         that:
-          - "'jtopjian' in authorized_keys_output.stdout"
+          - "'foo' in authorized_keys_output.stdout"
+          - "'bar' in authorized_keys_output.stdout"
 
     # Confirm iptables rules
     - name: List iptables rules
@@ -25,7 +26,7 @@
       assert:
         that:
           - "'{{ item }} -j ACCEPT' in iptables_save_output.stdout"
-      loop: "{{ cybera_networks_ipv4_trusted }}"
+      loop: "{{ cybera_networks_ipv4_trusted_global | zip(cybera_networks_ipv4_trusted) | flatten }}"
 
     # Confirm package installation
     - name: List curl package

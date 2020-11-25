@@ -39,6 +39,15 @@
     ip_version: ipv6
     jump: ACCEPT
 
+- name: Allow traffic from globally trusted IPv4 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv4
+    jump: ACCEPT
+  loop: "{{ cybera_networks_ipv4_trusted_global }}"
+
 - name: Allow traffic from trusted IPv4 sources
   iptables:
     chain: INPUT
@@ -47,6 +56,15 @@
     ip_version: ipv4
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv4_trusted }}"
+
+- name: Allow traffic from globally trusted IPv6 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv6
+    jump: ACCEPT
+  loop: "{{ cybera_networks_ipv6_trusted_global }}"
 
 - name: Allow traffic from trusted IPv6 sources
   iptables:
@@ -57,6 +75,15 @@
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv6_trusted }}"
 
+- name: Deny traffic from globally untrusted IPv4 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv4
+    jump: DENY
+  loop: "{{ cybera_networks_ipv4_untrusted_global }}"
+
 - name: Deny traffic from untrusted IPv4 sources
   iptables:
     chain: INPUT
@@ -65,6 +92,15 @@
     ip_version: ipv4
     jump: DENY
   loop: "{{ cybera_networks_ipv4_untrusted }}"
+
+- name: Deny traffic from globally untrusted IPv6 sources
+  iptables:
+    chain: INPUT
+    source: "{{ item }}"
+    protocol: all
+    ip_version: ipv6
+    jump: DENY
+  loop: "{{ cybera_networks_ipv6_untrusted_global }}"
 
 - name: Deny traffic from untrusted IPv6 sources
   iptables:
