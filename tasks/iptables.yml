@@ -18,6 +18,21 @@
     ip_version: ipv6
     jump: ACCEPT
 
+- name: Set the default policy for INPUT to ACCEPT
+  iptables:
+    chain: INPUT
+    jump: ACCEPT
+
+- name: Set the default policy for FORWARD to ACCEPT
+  iptables:
+    chain: FORWARD
+    jump: ACCEPT
+
+- name: Set the default policy for OUTPUT to ACCEPT
+  iptables:
+    chain: OUTPUT
+    jump: ACCEPT
+
 - name: Accept all IPv6 ICMP
   iptables:
     chain: INPUT
@@ -81,7 +96,7 @@
     source: "{{ item }}"
     protocol: all
     ip_version: ipv4
-    jump: DENY
+    jump: DROP
   loop: "{{ cybera_networks_ipv4_untrusted_global }}"
 
 - name: Deny traffic from untrusted IPv4 sources
@@ -90,7 +105,7 @@
     source: "{{ item }}"
     protocol: all
     ip_version: ipv4
-    jump: DENY
+    jump: DROP
   loop: "{{ cybera_networks_ipv4_untrusted }}"
 
 - name: Deny traffic from globally untrusted IPv6 sources
@@ -99,7 +114,7 @@
     source: "{{ item }}"
     protocol: all
     ip_version: ipv6
-    jump: DENY
+    jump: DROP
   loop: "{{ cybera_networks_ipv6_untrusted_global }}"
 
 - name: Deny traffic from untrusted IPv6 sources
@@ -108,7 +123,7 @@
     source: "{{ item }}"
     protocol: all
     ip_version: ipv6
-    jump: DENY
+    jump: DROP
   loop: "{{ cybera_networks_ipv6_untrusted }}"
 
 - name: Drop all other IPv4 traffic
