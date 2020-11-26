@@ -3,8 +3,10 @@
   shell:
     cmd: bash create.sh
     chdir: /root/cybera-dotfiles
+  when: not ansible_check_mode
 
 - name: Restart journald
   systemd:
     name: systemd-journald
     state: restarted
+  when: not ansible_check_mode

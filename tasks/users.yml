@@ -2,18 +2,17 @@
 - name: Manage system groups
   group:
     name: "{{ item.key }}"
-    state: "{{ item.value.state }}"
+    state: "{{ item.value.state | default('present') }}"
     gid: "{{ item.value.gid }}"
   loop: "{{ cybera_system_users|dict2items }}"
 
 - name: Manage system users
   user:
     name: "{{ item.key }}"
-    state: "{{ item.value.state }}"
+    state: "{{ item.value.state | default('present') }}"
     uid: "{{ item.value.uid }}"
     group: "{{ item.value.gid }}"
-    groups: "{{ item.value.groups|default([]) }}"
     shell: "{{ item.value.shell }}"
-    password: "{{ item.value.password }}"
-    create_home: "{{ item.value.create_home }}"
+    password: "{{ item.value.password | default('*') }}"
+    create_home: "{{ item.value.create_home | default(False) }}"
   loop: "{{ cybera_system_users|dict2items }}"
