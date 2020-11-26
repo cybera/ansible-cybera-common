@@ -18,21 +18,6 @@
     ip_version: ipv6
     jump: ACCEPT
 
-- name: Set the default policy for INPUT to ACCEPT
-  iptables:
-    chain: INPUT
-    jump: ACCEPT
-
-- name: Set the default policy for FORWARD to ACCEPT
-  iptables:
-    chain: FORWARD
-    jump: ACCEPT
-
-- name: Set the default policy for OUTPUT to ACCEPT
-  iptables:
-    chain: OUTPUT
-    jump: ACCEPT
-
 - name: Accept all IPv6 ICMP
   iptables:
     chain: INPUT
