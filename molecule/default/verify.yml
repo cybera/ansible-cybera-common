@@ -90,14 +90,22 @@
       loop: "{{ removed_files_stat.results }}"
 
     # Verify users exist
-    - name: Check for home directories
+    - name: Check for foo home directory
       stat:
-        path: "/home/{{ item.key }}"
-      loop: "{{ cybera_system_users|dict2items }}"
-      register: user_stats
+        path: "/home/foo"
+      register: user_foo_stats
 
-    - name: Verify users exist
+    - name: Verify foo user exist
       assert:
         that:
-          - "'{{ item.stat.exists }}' == 'True'"
-      loop: "{{ user_stats.results }}"
+          - "'{{ user_foo_stats.stat.exists }}' == 'True'"
+
+    - name: Check for bar home directory
+      stat:
+        path: "/opt/bar"
+      register: user_bar_stats
+
+    - name: Verify bar user exist
+      assert:
+        that:
+          - "'{{ user_bar_stats.stat.exists }}' == 'True'"

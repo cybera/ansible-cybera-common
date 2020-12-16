@@ -3,16 +3,17 @@
   group:
     name: "{{ item.key }}"
     state: "{{ item.value.state | default('present') }}"
-    gid: "{{ item.value.gid }}"
+    gid: "{{ item.value.gid | default(omit) }}"
   loop: "{{ cybera_system_users|dict2items }}"
 
 - name: Manage system users
   user:
     name: "{{ item.key }}"
     state: "{{ item.value.state | default('present') }}"
-    uid: "{{ item.value.uid }}"
-    group: "{{ item.value.gid }}"
-    shell: "{{ item.value.shell }}"
+    uid: "{{ item.value.uid | default(omit) }}"
+    group: "{{ item.value.gid | default(omit) }}"
+    shell: "{{ item.value.shell | default(omit) }}"
     password: "{{ item.value.password | default('*') }}"
+    home: "{{ item.value.home | default(omit) }}"
     create_home: "{{ item.value.create_home | default(False) }}"
   loop: "{{ cybera_system_users|dict2items }}"

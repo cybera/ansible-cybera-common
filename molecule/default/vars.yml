@@ -51,3 +51,12 @@ cybera_system_users:
     shell: /bin/bash
     password: '*'
     create_home: true
+
+  bar:
+    state: present
+    uid: 1002
+    gid: 1002
+    shell: /bin/bash
+    password: '*'
+    home: /opt/bar
+    create_home: true
