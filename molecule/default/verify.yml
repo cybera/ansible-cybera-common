@@ -113,9 +113,29 @@
     - name: Capture rsyslog client.conf file
       shell: "cat /etc/rsyslog.d/client.conf"
       register: rsyslog_client_conf
+      when: ansible_os_family == "Debian"
 
     - name: Verify rsyslog client settings
       assert:
         that:
           - "'/etc/ssl/certs/rsyslog.crt' in rsyslog_client_conf.stdout"
           - "'localhost' in rsyslog_client_conf.stdout"
+      when: ansible_os_family == "Debian"
+
+    - name: Capture postfix configuration file
+      shell: "cat /etc/postfix/main.cf"
+      register: postfix_main_cf
+
+    - name: Verify relay host was set
+      assert:
+        that:
+          - "'relayhost = example.com' in postfix_main_cf.stdout"
+
+    - name: Capture mail aliases
+      shell: "cat /etc/aliases"
+      register: mail_aliases
+
+    - name: Verify mail aliases were set
+      assert:
+        that:
+          - "'root: john.doe@example.com, jane.doe@example.com, jack.doe@example.com' in mail_aliases.stdout"

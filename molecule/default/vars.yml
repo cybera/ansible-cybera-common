@@ -63,3 +63,13 @@ cybera_system_users:
 
 cybera_rsyslog_ssl_ca_file: /etc/ssl/certs/rsyslog.crt
 cybera_rsyslog_upstream_server: localhost
+
+cybera_postfix_relayhost: example.com
+cybera_mail_aliases_global:
+  root:
+    - john.doe@example.com
+    - jane.doe@example.com
+
+cybera_mail_aliases:
+  root:
+    - jack.doe@example.com

@@ -1,0 +1,3 @@
+{% for item in cybera_mail_aliases_global | combine(cybera_mail_aliases, list_merge='append') | dict2items -%}
+{{ item.key }}: {{ item.value | join(', ') }}
+{% endfor %}

@@ -118,3 +118,18 @@ cybera_rsyslog_ratelimit_burst: 10000
 cybera_rsyslog_ssl_ca_file_src: ""
 cybera_rsyslog_ssl_ca_file: ""
 cybera_rsyslog_upstream_server: ""
+
+# These variables configure postfix client on a node.
+#
+# Example:
+#   cybera_mail_aliases_global:
+#     root:
+#       - john.doe@example.com
+#       - jane.doe@example.com
+#
+#   cybera_mail_aliases:
+#     root:
+#       - jack.doe@example.com
+cybera_postfix_relayhost: ""
+cybera_mail_aliases_global: {}
+cybera_mail_aliases: {}

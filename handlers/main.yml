@@ -16,3 +16,14 @@
     name: rsyslog
     state: restarted
   when: not ansible_check_mode
+
+- name: Restart postfix
+  systemd:
+    name: postfix
+    state: restarted
+  when: not ansible_check_mode
+
+- name: Build mail aliases
+  shell:
+    cmd: /usr/bin/newaliases
+  when: not ansible_check_mode

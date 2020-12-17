@@ -37,3 +37,6 @@
 
 - name: Manage rsyslog client
   include: rsyslog_client.yml
+
+- name: Manage Postfix and mail aliases
+  include: postfix_client.yml
