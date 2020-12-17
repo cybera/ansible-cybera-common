@@ -1,0 +1,32 @@
+$RepeatedMsgReduction off
+
+$MaxMessageSize {{ cybera_rsyslog_max_message_size }}
+$SystemLogRateLimitInterval {{ cybera_rsyslog_ratelimit_interval }}
+$SystemLogRateLimitBurst {{ cybera_rsyslog_ratelimit_burst }}
+
+# An "In-Memory Queue" is created for remote logging.
+$WorkDirectory /var/spool/rsyslog
+$ActionQueueFileName queue
+$ActionQueueMaxDiskSpace 1g
+$ActionQueueSaveOnShutdown on
+$ActionQueueType LinkedList
+$ActionResumeRetryCount -1
+
+# Using specified format for default logging format:
+$ActionFileDefaultTemplate RSYSLOG_FileFormat
+
+{% if cybera_rsyslog_ssl_ca_file != "" -%}
+# Setup SSL connection.
+# CA/Cert
+$DefaultNetStreamDriverCAFile {{ cybera_rsyslog_ssl_ca_file }}
+
+# Connection settings.
+$DefaultNetstreamDriver gtls
+$ActionSendStreamDriverMode 1
+$ActionSendStreamDriverAuthMode anon
+{% endif %}
+
+{% if cybera_rsyslog_upstream_server != "" -%}
+# Send all logs to {{ cybera_rsyslog_upstream_server }}
+*.* @@{{ cybera_rsyslog_upstream_server }}:514
+{% endif -%}

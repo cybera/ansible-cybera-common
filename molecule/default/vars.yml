@@ -60,3 +60,6 @@ cybera_system_users:
     password: '*'
     home: /opt/bar
     create_home: true
+
+cybera_rsyslog_ssl_ca_file: /etc/ssl/certs/rsyslog.crt
+cybera_rsyslog_upstream_server: localhost

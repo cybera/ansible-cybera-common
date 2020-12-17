@@ -10,3 +10,9 @@
     name: systemd-journald
     state: restarted
   when: not ansible_check_mode
+
+- name: Restart rsyslog
+  systemd:
+    name: rsyslog
+    state: restarted
+  when: not ansible_check_mode

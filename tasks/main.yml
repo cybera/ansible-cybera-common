@@ -34,3 +34,6 @@
 
 - name: Manage automatic security updates
   include: security_updates.yml
+
+- name: Manage rsyslog client
+  include: rsyslog_client.yml

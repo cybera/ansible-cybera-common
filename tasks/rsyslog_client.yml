@@ -1,0 +1,30 @@
+---
+- name: Configure rsyslog client (Debian)
+  block:
+    - name: Copy rsyslog SSL CA file
+      copy:
+        src: "{{ cybera_rsyslog_ssl_ca_file_src }}"
+        dest: "{{ cybera_rsyslog_ssl_ca_file }}"
+        owner: root
+        group: root
+        mode: "0644"
+      when: cybera_rsyslog_ssl_ca_file_src and cybera_rsyslog_ssl_ca_file
+
+    - name: Copy rsyslog.conf file
+      copy:
+        src: files/rsyslog/rsyslog.conf
+        dest: /etc/rsyslog.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart rsyslog
+
+    - name: Copy rsyslog client.conf file
+      template:
+        src: templates/rsyslog/client.conf.j2
+        dest: /etc/rsyslog.d/client.conf
+        owner: root
+        group: root
+        mode: "0644"
+      notify: Restart rsyslog
+  when: ansible_os_family == "Debian"

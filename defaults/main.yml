@@ -110,3 +110,11 @@ cybera_ssh_authorized_keys: {}
 #       password: '*'
 #       create_home: true
 cybera_system_users: {}
+
+# These variables configure rsyslog client on a node.
+cybera_rsyslog_max_message_size: 40960
+cybera_rsyslog_ratelimit_interval: 0
+cybera_rsyslog_ratelimit_burst: 10000
+cybera_rsyslog_ssl_ca_file_src: ""
+cybera_rsyslog_ssl_ca_file: ""
+cybera_rsyslog_upstream_server: ""

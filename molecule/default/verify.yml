@@ -109,3 +109,13 @@
       assert:
         that:
           - "'{{ user_bar_stats.stat.exists }}' == 'True'"
+
+    - name: Capture rsyslog client.conf file
+      shell: "cat /etc/rsyslog.d/client.conf"
+      register: rsyslog_client_conf
+
+    - name: Verify rsyslog client settings
+      assert:
+        that:
+          - "'/etc/ssl/certs/rsyslog.crt' in rsyslog_client_conf.stdout"
+          - "'localhost' in rsyslog_client_conf.stdout"
