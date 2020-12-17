@@ -13,6 +13,9 @@ This role does the following:
 * Configures systemd journal.
 * Applies a set of Ubuntu quirk fixes.
 * Manages specified system users.
+* Configures and manages rsyslog client settings.
+* Configures and manages Postfix to send mail to an upstream smtp server.
+* Configures and manages mail aliases in /etc/aliases.
 
 ## Usage
 
