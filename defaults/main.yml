@@ -111,7 +111,7 @@ cybera_ssh_authorized_keys: {}
 #       create_home: true
 cybera_system_users: {}
 
-# Set this to a dict/hash of users that should be
+# Set this to a list of users that should be
 # removed from the system.
 #
 # This will take place before users are added.
