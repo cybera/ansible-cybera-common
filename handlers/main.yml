@@ -1,6 +1,6 @@
 ---
 - name: Install dotfiles
-  shell:
+  command:
     cmd: bash create.sh
     chdir: /root/cybera-dotfiles
   when: not ansible_check_mode
@@ -24,6 +24,6 @@
   when: not ansible_check_mode
 
 - name: Build mail aliases
-  shell:
+  command:
     cmd: /usr/bin/newaliases
   when: not ansible_check_mode
