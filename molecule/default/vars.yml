@@ -43,6 +43,9 @@ cybera_ssh_authorized_keys:
     user: 'foo'
     ssh_keys: ['foo_key']
 
+cybera_system_users_absent:
+  - jdoe
+
 cybera_system_users:
   foo:
     state: present

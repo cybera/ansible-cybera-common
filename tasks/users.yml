@@ -1,4 +1,18 @@
 ---
+- name: Remove specified users
+  user:
+    name: "{{ item }}"
+    state: absent
+    remove: true
+    force: true
+  loop: "{{ cybera_system_users_absent }}"
+
+- name: Remove specified personal groups
+  group:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ cybera_system_users_absent }}"
+
 - name: Manage system groups
   group:
     name: "{{ item.key }}"

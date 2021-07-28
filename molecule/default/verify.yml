@@ -89,6 +89,21 @@
           - "'{{ item.stat.exists }}' == 'False'"
       loop: "{{ removed_files_stat.results }}"
 
+    # Verify users were removed
+    - name: Get contents of /etc/group
+      shell: "cat /etc/group"
+      register: etc_group_output
+
+    - name: Get contents of /etc/passwd
+      shell: "cat /etc/passwd"
+      register: etc_passwd_output
+
+    - name: Verify jdoe user does not exist
+      assert:
+        that:
+          - "'jdoe' not in etc_group_output.stdout"
+          - "'jdoe' not in etc_passwd_output.stdout"
+
     # Verify users exist
     - name: Check for foo home directory
       stat:
