@@ -22,11 +22,17 @@
       shell: "iptables-save"
       register: iptables_save_output
 
-    - name: Verify iptables is configured correctly
+    - name: Verify iptables networks are configured correctly
       assert:
         that:
           - "'{{ item }} -j ACCEPT' in iptables_save_output.stdout"
       loop: "{{ cybera_networks_ipv4_trusted_global | zip(cybera_networks_ipv4_trusted) | flatten }}"
+
+    - name: Verify iptables ports configured correctly
+      assert:
+        that:
+          - "'--dport {{ (item|dict2items).0.value }} -j ACCEPT' in iptables_save_output.stdout"
+      loop: "{{ cybera_open_ports_ipv4 }}"
 
     # Confirm package installation
     - name: List curl package

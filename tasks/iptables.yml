@@ -57,6 +57,15 @@
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv4_trusted }}"
 
+- name: Allow all IPv4 traffic to open ports
+  iptables:
+    chain: INPUT
+    destination_port: "{{ (item|dict2items).0.value }}"
+    protocol: "{{ (item|dict2items).0.key }}"
+    ip_version: ipv4
+    jump: ACCEPT
+  loop: "{{ cybera_open_ports_ipv4 }}"
+
 - name: Allow traffic from globally trusted IPv6 sources
   iptables:
     chain: INPUT
@@ -74,6 +83,15 @@
     ip_version: ipv6
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv6_trusted }}"
+
+- name: Allow all IPv6 traffic to open ports
+  iptables:
+    chain: INPUT
+    destination_port: "{{ (item|dict2items).0.value }}"
+    protocol: "{{ (item|dict2items).0.key }}"
+    ip_version: ipv6
+    jump: ACCEPT
+  loop: "{{ cybera_open_ports_ipv6 }}"
 
 - name: Deny traffic from globally untrusted IPv4 sources
   iptables:

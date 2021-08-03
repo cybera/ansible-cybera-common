@@ -7,6 +7,14 @@ cybera_networks_ipv4_trusted_global:
 cybera_networks_ipv4_trusted:
   - 172.17.0.0/16
 
+cybera_open_ports_ipv4:
+  - tcp: 80
+  - tcp: 443
+
+cybera_open_ports_ipv6:
+  - tcp: 80
+  - tcp: 443
+
 cybera_packages_debian_global:
   cron: present
 
