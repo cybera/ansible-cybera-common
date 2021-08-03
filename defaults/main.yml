@@ -11,6 +11,18 @@ cybera_networks_ipv4_untrusted_global: []
 cybera_networks_ipv6_trusted_global: []
 cybera_networks_ipv6_untrusted_global: []
 
+# Set these values to a list of CIDR subnets.
+# These are meant to be set in a per role/group
+# var file.
+#
+# Example:
+#   cybera_networks_ipv4_trusted:
+#     - 192.168.255.0/24
+cybera_networks_ipv4_trusted: []
+cybera_networks_ipv4_untrusted: []
+cybera_networks_ipv6_trusted: []
+cybera_networks_ipv6_untrusted: []
+
 # Set these values to a list of ports.
 # These are meant to be ports accessible
 # to anyone. For example, a public web
@@ -23,18 +35,6 @@ cybera_networks_ipv6_untrusted_global: []
 #     - tcp: 443
 cybera_open_ports_ipv4: []
 cybera_open_ports_ipv6: []
-
-# Set these values to a list of CIDR subnets.
-# These are meant to be set in a per role/group
-# var file.
-#
-# Example:
-#   cybera_networks_ipv4_trusted:
-#     - 192.168.255.0/24
-cybera_networks_ipv4_trusted: []
-cybera_networks_ipv4_untrusted: []
-cybera_networks_ipv6_trusted: []
-cybera_networks_ipv6_untrusted: []
 
 # Set these to a dict of packages which should be
 # installed or uninstalled on all system.
