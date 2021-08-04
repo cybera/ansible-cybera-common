@@ -1,0 +1,40 @@
+---
+##
+# Sensu agent configuration
+##
+{% if not cybera_sensu_agent_config or "backend-url" not in cybera_sensu_agent_config %}
+backend-url:
+{{ cybera_sensu_agent_backends | to_nice_yaml }}
+{% endif -%}
+
+{% if cybera_sensu_agent_trusted_ca_file is defined and
+      not (cybera_sensu_agent_config and "trusted-ca-file" in cybera_sensu_agent_config) %}
+trusted-ca-file: "/etc/sensu/sensu-agent-trusted-ca.crt"
+{% endif -%}
+
+{% if cybera_sensu_agent_trusted_ca_file is defined or cybera_sensu_agent_config and
+      ("trusted-ca-file" in cybera_sensu_agent_config and
+       not "insecure-skip-tls-verify" in cybera_sensu_agent_config) %}
+insecure-skip-tls-verify: false
+{% endif -%}
+
+redact:
+- password
+- passwd
+- pass
+- api_key
+- api_token
+- access_key
+- secret_key
+- private_key
+- secret
+
+password: {{ cybera_sensu_agent_password }}
+
+{% if cybera_sensu_agent_config_global %}
+{{ cybera_sensu_agent_config_global | to_nice_yaml }}
+{% endif %}
+
+{% if cybera_sensu_agent_config %}
+{{ cybera_sensu_agent_config | to_nice_yaml }}
+{% endif %}

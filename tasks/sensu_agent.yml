@@ -1,0 +1,96 @@
+---
+- name: Configure Sensu Agent (Debian)
+  block:
+    - name: Install Sensu Agent package
+      apt:
+        deb: "{{ cybera_sensu_agent_package_url }}"
+
+    - name: Manage Sensu group
+      group:
+        name: sensu
+        gid: 9999
+
+    - name: Manage Sensu user
+      user:
+        name: sensu
+        uid: 9999
+        group: sensu
+        shell: /usr/sbin/nologin
+        password: '*'
+        home: /var/lib/sensu
+        create_home: False
+
+    - name: Manage /etc/sensu
+      file:
+        name: /etc/sensu
+        state: directory
+        owner: sensu
+        group: sensu
+        mode: 0750
+
+    - name: Manage /etc/sensu/ssl
+      file:
+        name: /etc/sensu/ssl
+        state: directory
+        owner: sensu
+        group: sensu
+        mode: 0750
+
+    - name: Manage /var/lib/sensu permissions
+      file:
+        name: /var/lib/sensu
+        state: directory
+        owner: sensu
+        group: sensu
+        recurse: yes
+
+    - name: Manage /var/cache/sensu permissions
+      file:
+        name: /var/cache/sensu
+        state: directory
+        owner: sensu
+        group: sensu
+        recurse: yes
+
+    - name: Manage /var/log/sensu permissions
+      file:
+        name: /var/log/sensu
+        state: directory
+        owner: sensu
+        group: sensu
+        recurse: yes
+
+    - name: Install trusted CA file
+      copy:
+        src: "{{ cybera_sensu_agent_trusted_ca_file }}"
+        dest: "/etc/sensu/sensu-agent-trusted-ca.crt"
+        owner: sensu
+        group: sensu
+        mode: "0640"
+      notify: Restart Sensu Agent
+
+    - name: Configure Sensu
+      template:
+        src: sensu/agent.yml.j2
+        dest: /etc/sensu/agent.yml
+        owner: sensu
+        group: sensu
+        mode: 0640
+      notify: Restart Sensu Agent
+
+    - name: Manage the systemd unit file
+      copy:
+        src: files/sensu/sensu-agent.service
+        dest: /etc/systemd/system/sensu-agent.service
+        owner: root
+        group: root
+        mode: "0444"
+      notify:
+        - Restart Sensu Agent
+        - Reload systemd
+      register: sensu_systemd
+
+    - name: Manage the sensu service
+      systemd:
+        name: sensu-agent
+        state: started

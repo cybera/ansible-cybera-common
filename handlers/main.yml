@@ -11,6 +11,11 @@
     state: restarted
   when: not ansible_check_mode
 
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes
+  when: not ansible_check_mode
+
 - name: Restart rsyslog
   systemd:
     name: rsyslog
@@ -26,4 +31,10 @@
 - name: Build mail aliases
   command:
     cmd: /usr/bin/newaliases
+  when: not ansible_check_mode
+
+- name: Restart Sensu Agent
+  systemd:
+    name: sensu-agent
+    state: restarted
   when: not ansible_check_mode
