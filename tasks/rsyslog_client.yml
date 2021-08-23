@@ -1,6 +1,16 @@
 ---
 - name: Configure rsyslog client (Debian)
   block:
+    - name: Install rsyslog
+      package:
+        name: rsyslog
+        state: present
+
+    - name: Install rsyslog-gnutls
+      package:
+        name: rsyslog-gnutls
+        state: present
+
     - name: Copy rsyslog SSL CA file
       copy:
         src: "{{ cybera_rsyslog_ssl_ca_file_src }}"
