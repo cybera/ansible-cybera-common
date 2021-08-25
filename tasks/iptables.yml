@@ -1,4 +1,42 @@
 ---
+- name: Ensure iptables ipv4 save file exists
+  copy:
+    content: ""
+    dest: /etc/iptables-ipv4.rules
+    force: no
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Ensure iptables ipv6 save file exists
+  copy:
+    content: ""
+    dest: /etc/iptables-ipv6.rules
+    force: no
+    owner: root
+    group: root
+    mode: 0640
+
+- name: Manage the iptables ipv4 startup file
+  copy:
+    src: files/iptables/restore-iptables-ipv4-rules.service
+    dest: /etc/systemd/system/restore-iptables-ipv4-rules.service
+    owner: root
+    group: root
+    mode: "0444"
+  notify:
+    - Reload systemd
+
+- name: Manage the iptables ipv6 startup file
+  copy:
+    src: files/iptables/restore-iptables-ipv6-rules.service
+    dest: /etc/systemd/system/restore-iptables-ipv6-rules.service
+    owner: root
+    group: root
+    mode: "0444"
+  notify:
+    - Reload systemd
+
 - name: Ensure iptables is installed
   package:
     name: iptables
@@ -10,6 +48,9 @@
     in_interface: lo
     ip_version: ipv4
     jump: ACCEPT
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow IPv6 traffic to lo
   iptables:
@@ -17,6 +58,9 @@
     in_interface: lo
     ip_version: ipv6
     jump: ACCEPT
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Accept all IPv6 ICMP
   iptables:
@@ -24,6 +68,9 @@
     protocol: ipv6-icmp
     ip_version: ipv6
     jump: ACCEPT
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow established traffic from IPv4
   iptables:
@@ -31,6 +78,9 @@
     ctstate: ESTABLISHED,RELATED
     ip_version: ipv4
     jump: ACCEPT
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow established traffic from IPv6
   iptables:
@@ -38,6 +88,9 @@
     ctstate: ESTABLISHED,RELATED
     ip_version: ipv6
     jump: ACCEPT
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow traffic from globally trusted IPv4 sources
   iptables:
@@ -47,6 +100,9 @@
     ip_version: ipv4
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv4_trusted_global }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow traffic from trusted IPv4 sources
   iptables:
@@ -56,6 +112,9 @@
     ip_version: ipv4
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv4_trusted }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow all IPv4 traffic to open ports
   iptables:
@@ -65,6 +124,9 @@
     ip_version: ipv4
     jump: ACCEPT
   loop: "{{ cybera_open_ports_ipv4 }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow traffic from globally trusted IPv6 sources
   iptables:
@@ -74,6 +136,9 @@
     ip_version: ipv6
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv6_trusted_global }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow traffic from trusted IPv6 sources
   iptables:
@@ -83,6 +148,9 @@
     ip_version: ipv6
     jump: ACCEPT
   loop: "{{ cybera_networks_ipv6_trusted }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Allow all IPv6 traffic to open ports
   iptables:
@@ -92,6 +160,9 @@
     ip_version: ipv6
     jump: ACCEPT
   loop: "{{ cybera_open_ports_ipv6 }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Deny traffic from globally untrusted IPv4 sources
   iptables:
@@ -101,6 +172,9 @@
     ip_version: ipv4
     jump: DROP
   loop: "{{ cybera_networks_ipv4_untrusted_global }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Deny traffic from untrusted IPv4 sources
   iptables:
@@ -110,6 +184,9 @@
     ip_version: ipv4
     jump: DROP
   loop: "{{ cybera_networks_ipv4_untrusted }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Deny traffic from globally untrusted IPv6 sources
   iptables:
@@ -119,6 +196,9 @@
     ip_version: ipv6
     jump: DROP
   loop: "{{ cybera_networks_ipv6_untrusted_global }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Deny traffic from untrusted IPv6 sources
   iptables:
@@ -128,15 +208,24 @@
     ip_version: ipv6
     jump: DROP
   loop: "{{ cybera_networks_ipv6_untrusted }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Drop all other IPv4 traffic
   iptables:
     chain: INPUT
     ip_version: ipv4
     policy: DROP
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
 
 - name: Drop all other IPv6 traffic
   iptables:
     chain: INPUT
     ip_version: ipv6
     policy: DROP
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules

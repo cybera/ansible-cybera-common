@@ -38,3 +38,13 @@
     name: sensu-agent
     state: restarted
   when: not ansible_check_mode
+
+- name: Save iptables IPv4 Rules
+  community.general.iptables_state:
+    state: saved
+    path: /etc/iptables-ipv4.rules
+
+- name: Save iptables IPv6 Rules
+  community.general.iptables_state:
+    state: saved
+    path: /etc/iptables-ipv6.rules

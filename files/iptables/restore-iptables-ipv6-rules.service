@@ -1,0 +1,9 @@
+[Unit]
+Description = Apply iptables ipv4 rules
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'ip6tables-restore < /etc/iptables-ipv6.rules'
+
+[Install]
+WantedBy=network-pre.target
