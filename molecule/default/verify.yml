@@ -121,6 +121,15 @@
         that:
           - "'{{ user_foo_stats.stat.exists }}' == 'True'"
 
+    - name: Get user's groups
+      shell: "groups foo"
+      register: user_foo_groups
+
+    - name: Verify user's groups
+      assert:
+        that:
+          - "'sudo' in user_foo_groups.stdout"
+
     - name: Check for bar home directory
       stat:
         path: "/opt/bar"

@@ -119,6 +119,7 @@ cybera_ssh_authorized_keys: {}
 #       state: present
 #       uid: 1001
 #       gid: 1001
+#       extra_groups: ['sudo']
 #       shell: /bin/bash
 #       password: '*'
 #       create_home: true

@@ -26,6 +26,7 @@
     state: "{{ item.value.state | default('present') }}"
     uid: "{{ item.value.uid | default(omit) }}"
     group: "{{ item.value.gid | default(omit) }}"
+    groups: "{{ item.value.extra_groups | default(omit) }}"
     shell: "{{ item.value.shell | default(omit) }}"
     password: "{{ item.value.password | default('*') }}"
     home: "{{ item.value.home | default(omit) }}"

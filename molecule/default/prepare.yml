@@ -16,3 +16,9 @@
         shell: /bin/bash
         password: '*'
         create_home: true
+
+    - name: Ensure the sudo group exists
+      group:
+        name: sudo
+        gid: 27
+        state: present

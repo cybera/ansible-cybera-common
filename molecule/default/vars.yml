@@ -59,6 +59,7 @@ cybera_system_users:
     state: present
     uid: 1001
     gid: 1001
+    extra_groups: ['sudo']
     shell: /bin/bash
     password: '*'
     create_home: true
