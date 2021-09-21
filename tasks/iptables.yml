@@ -37,6 +37,18 @@
   notify:
     - Reload systemd
 
+- name: Manage the iptables ipv4 restore service
+  systemd:
+    name: restore-iptables-ipv4-rules
+    enabled: yes
+    masked: no
+
+- name: Manage the iptables ipv6 restore service
+  systemd:
+    name: restore-iptables-ipv6-rules
+    enabled: yes
+    masked: no
+
 - name: Ensure iptables is installed
   package:
     name: iptables
