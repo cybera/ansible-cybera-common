@@ -5,6 +5,12 @@
     value: '0'
     reload: yes
 
+- name: Disable IPv6 tempaddr by default
+  ansible.posix.sysctl:
+    name: net.ipv6.conf.default.use_tempaddr
+    value: '0'
+    reload: yes
+
 - name: Ensure IPv6 RA's are accepted
   ansible.posix.sysctl:
     name: net.ipv6.conf.all.accept_ra
