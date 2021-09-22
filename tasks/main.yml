@@ -40,3 +40,6 @@
 
 - name: Manage Postfix and mail aliases
   include: postfix_client.yml
+
+- name: Flush handlers
+  meta: flush_handlers
