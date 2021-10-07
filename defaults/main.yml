@@ -123,6 +123,7 @@ cybera_ssh_authorized_keys: {}
 #       shell: /bin/bash
 #       password: '*'
 #       create_home: true
+#       sudo: true
 cybera_system_users: {}
 
 # Set this to a list of users that should be

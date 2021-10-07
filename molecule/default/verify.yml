@@ -140,6 +140,15 @@
         that:
           - "'{{ user_bar_stats.stat.exists }}' == 'True'"
 
+    - name: Get sudo file
+      shell: "cat /etc/sudoers.d/foo"
+      register: sudoers_file
+
+    - name: Verify sudo access
+      assert:
+        that:
+          - "'foo in '{{ sudoers_file.stdout }}'
+
     - name: Capture rsyslog client.conf file
       shell: "cat /etc/rsyslog.d/client.conf"
       register: rsyslog_client_conf

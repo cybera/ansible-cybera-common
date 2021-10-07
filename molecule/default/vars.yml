@@ -63,6 +63,7 @@ cybera_system_users:
     shell: /bin/bash
     password: '*'
     create_home: true
+    sudo: true
 
   bar:
     state: present

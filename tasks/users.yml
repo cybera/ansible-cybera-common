@@ -32,3 +32,15 @@
     home: "{{ item.value.home | default(omit) }}"
     create_home: "{{ item.value.create_home | default(False) }}"
   loop: "{{ cybera_system_users|dict2items }}"
+
+- name: Manage sudo access
+  copy:
+    dest: "/etc/sudoers.d/{{ item.key }}"
+    content: |
+      # User rules for {{ item.key }}
+      # {{ item.key }} ALL=(ALL) NOPASSWD:ALL
+    owner: root
+    group: root
+    mode: 0440
+  loop: "{{ cybera_system_users|dict2items }}"
+  when: item.value.sudo|default(false) == true
