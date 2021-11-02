@@ -1,5 +1,6 @@
 galaxy_info:
-  author: Cybera
+  author: cybera
+  role_name: cybera_common
   description: common settings for cybera servers
   company: Cybera
   license: MIT

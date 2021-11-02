@@ -7,6 +7,9 @@
   package:
     update_cache: yes
 
+- name: Manage the system timezone
+  include: timezone.yml
+
 - name: Manage iptables
   include: iptables.yml
 

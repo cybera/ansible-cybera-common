@@ -2,6 +2,15 @@
   hosts: all
 
   tasks:
+    - name: Refresh package cache
+      package:
+        update_cache: yes
+
+    - name: Install tzdata
+      package:
+        name: tzdata
+      when: ansible_os_family == "Debian"
+
     - name: Create group to later remove
       group:
         name: jdoe

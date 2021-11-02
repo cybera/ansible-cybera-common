@@ -42,12 +42,14 @@
     name: restore-iptables-ipv4-rules
     enabled: yes
     masked: no
+  when: not ansible_check_mode
 
 - name: Manage the iptables ipv6 restore service
   systemd:
     name: restore-iptables-ipv6-rules
     enabled: yes
     masked: no
+  when: not ansible_check_mode
 
 - name: Ensure iptables is installed
   package:

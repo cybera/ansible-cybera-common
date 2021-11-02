@@ -1,4 +1,9 @@
 ---
+# Set this to the appropriate timezone.
+# Example:
+#   cybera_timezone: America/Edmonton
+cybera_timezone: ""
+
 # Set these values to a list of CIDR subnets.
 # These are meant to be set in group_vars/all and
 # applied "globally" to all hosts.

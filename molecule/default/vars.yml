@@ -1,6 +1,8 @@
 ---
 # These variables are test values used for testing
 # the ansible-cybera-common playbook with Molecule.
+cybera_timezone: "America/Edmonton"
+
 cybera_networks_ipv4_trusted_global:
   - 192.168.1.0/24
 
