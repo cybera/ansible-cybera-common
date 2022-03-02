@@ -91,7 +91,7 @@
       register: sensu_systemd
 
     - name: Manage the sensu-agent service
-      system:
+      systemd:
         name: sensu-agent
         enabled: yes
         masked: no
