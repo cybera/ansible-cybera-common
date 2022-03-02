@@ -90,7 +90,15 @@
         - Reload systemd
       register: sensu_systemd
 
-    - name: Manage the sensu service
+    - name: Manage the sensu-agent service
+      system:
+        name: sensu-agent
+        enabled: yes
+        masked: no
+      when: not ansible_check_mode
+
+    - name: Ensure sensu-agent is started
       systemd:
         name: sensu-agent
         state: started
+      when: not ansible_check_mode
