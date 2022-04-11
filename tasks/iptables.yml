@@ -1,55 +1,8 @@
 ---
-- name: Ensure iptables ipv4 save file exists
-  copy:
-    content: ""
-    dest: /etc/iptables-ipv4.rules
-    force: no
-    owner: root
-    group: root
-    mode: 0640
-
-- name: Ensure iptables ipv6 save file exists
-  copy:
-    content: ""
-    dest: /etc/iptables-ipv6.rules
-    force: no
-    owner: root
-    group: root
-    mode: 0640
-
-- name: Manage the iptables ipv4 startup file
-  copy:
-    src: files/iptables/restore-iptables-ipv4-rules.service
-    dest: /etc/systemd/system/restore-iptables-ipv4-rules.service
-    owner: root
-    group: root
-    mode: "0444"
-  notify:
-    - Reload systemd
-
-- name: Manage the iptables ipv6 startup file
-  copy:
-    src: files/iptables/restore-iptables-ipv6-rules.service
-    dest: /etc/systemd/system/restore-iptables-ipv6-rules.service
-    owner: root
-    group: root
-    mode: "0444"
-  notify:
-    - Reload systemd
-
-- name: Manage the iptables ipv4 restore service
-  systemd:
-    name: restore-iptables-ipv4-rules
-    enabled: yes
-    masked: no
-  when: not ansible_check_mode
-
-- name: Manage the iptables ipv6 restore service
-  systemd:
-    name: restore-iptables-ipv6-rules
-    enabled: yes
-    masked: no
-  when: not ansible_check_mode
+- name: Ensure iptables-persistent is installed
+  package:
+    name: iptables-persistent
+    state: present
 
 - name: Ensure iptables is installed
   package:
