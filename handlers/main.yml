@@ -43,10 +43,10 @@
   community.general.iptables_state:
     state: saved
     ip_version: ipv4
-    path: /etc/iptables-ipv4.rules
+    path: /etc/iptables/rules.v4
 
 - name: Save iptables IPv6 Rules
   community.general.iptables_state:
     state: saved
     ip_version: ipv6
-    path: /etc/iptables-ipv6.rules
+    path: /etc/iptables/rules.v6
