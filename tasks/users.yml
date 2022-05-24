@@ -43,4 +43,4 @@
     group: root
     mode: 0440
   loop: "{{ cybera_system_users|dict2items }}"
-  when: item.value.sudo|default(false) == true
+  when: item.value.sudo|default(false) is true

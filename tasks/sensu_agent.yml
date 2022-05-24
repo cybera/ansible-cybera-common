@@ -42,6 +42,7 @@
         state: directory
         owner: sensu
         group: sensu
+        mode: 0750
         recurse: yes
 
     - name: Manage /var/cache/sensu permissions
@@ -50,6 +51,7 @@
         state: directory
         owner: sensu
         group: sensu
+        mode: 0750
         recurse: yes
 
     - name: Manage /var/log/sensu permissions
@@ -58,6 +60,7 @@
         state: directory
         owner: sensu
         group: sensu
+        mode: 0750
         recurse: yes
 
     - name: Install trusted CA file

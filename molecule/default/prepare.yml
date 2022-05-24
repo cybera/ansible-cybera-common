@@ -14,14 +14,14 @@
     - name: Create group to later remove
       group:
         name: jdoe
-        gid: 1001
+        gid: "1001"
 
     - name: Create user to later remove
       user:
         name: jdoe
         state: present
-        uid: 1001
-        group: 1001
+        uid: "1001"
+        group: "1001"
         shell: /bin/bash
         password: '*'
         create_home: true
@@ -29,5 +29,5 @@
     - name: Ensure the sudo group exists
       group:
         name: sudo
-        gid: 27
+        gid: "27"
         state: present

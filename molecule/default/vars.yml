@@ -59,8 +59,8 @@ cybera_system_users_absent:
 cybera_system_users:
   foo:
     state: present
-    uid: 1001
-    gid: 1001
+    uid: "1001"
+    gid: "1001"
     extra_groups: ['sudo']
     shell: /bin/bash
     password: '*'
@@ -69,8 +69,8 @@ cybera_system_users:
 
   bar:
     state: present
-    uid: 1002
-    gid: 1002
+    uid: "1002"
+    gid: "1002"
     shell: /bin/bash
     password: '*'
     home: /opt/bar

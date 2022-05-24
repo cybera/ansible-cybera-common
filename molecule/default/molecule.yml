@@ -14,26 +14,27 @@ platforms:
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     command: "/lib/systemd/systemd"
-  - name: centos7
-    image: docker.io/pycontribs/centos:7
-    pre_build_image: true
-    privileged: true
-    tmpfs:
-      - /run
-      - /tmp:exec
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: "/usr/sbin/init"
-  - name: centos8
-    image: docker.io/pycontribs/centos:8
-    pre_build_image: true
-    privileged: true
-    tmpfs:
-      - /run
-      - /tmp:exec
-    volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: "/usr/sbin/init"
+  # Unable to test centos at this time
+  #- name: centos7
+  #  image: docker.io/pycontribs/centos:7
+  #  pre_build_image: true
+  #  privileged: true
+  #  tmpfs:
+  #    - /run
+  #    - /tmp:exec
+  #  volumes:
+  #    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #  command: "/usr/sbin/init"
+  #- name: centos8
+  #  image: docker.io/pycontribs/centos:8
+  #  pre_build_image: true
+  #  privileged: true
+  #  tmpfs:
+  #    - /run
+  #    - /tmp:exec
+  #  volumes:
+  #    - /sys/fs/cgroup:/sys/fs/cgroup:ro
+  #  command: "/usr/sbin/init"
 provisioner:
   name: ansible
 verifier:
