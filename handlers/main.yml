@@ -3,6 +3,7 @@
   command:
     cmd: bash create.sh
     chdir: /root/cybera-dotfiles
+  ignore_errors: yes
   when: not ansible_check_mode
 
 - name: Restart journald
