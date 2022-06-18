@@ -38,7 +38,7 @@
     dest: "/etc/sudoers.d/{{ item.key }}"
     content: |
       # User rules for {{ item.key }}
-      # {{ item.key }} ALL=(ALL) NOPASSWD:ALL
+      {{ item.key }} ALL=(ALL) NOPASSWD:ALL
     owner: root
     group: root
     mode: 0440
