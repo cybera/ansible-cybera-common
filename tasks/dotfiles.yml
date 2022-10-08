@@ -4,4 +4,5 @@
     repo: https://github.com/cybera/cybera-dotfiles
     dest: /root/cybera-dotfiles
     version: master
+    force: yes
   notify: Install dotfiles
