@@ -7,3 +7,10 @@
   with_subelements:
     - "{{ cybera_ssh_authorized_keys_global | combine(cybera_ssh_authorized_keys, list_merge='append', recursive=True) }}"
     - ssh_keys
+
+- name: Ensure password authentication is disabled for ssh
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: '^#?\s*PasswordAuthentication\s'
+    line: 'PasswordAuthentication no'
+    state: present
