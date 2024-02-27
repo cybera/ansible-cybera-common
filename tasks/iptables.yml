@@ -95,6 +95,19 @@
     - Save iptables IPv4 Rules
     - Save iptables IPv6 Rules
 
+- name: Allow defined IPv4 ICMP types/codes
+  iptables:
+    chain: INPUT
+    comment: "{{ (item|dict2items).0.key }}"
+    icmp_type: "{{ (item|dict2items).0.value }}"
+    protocol: icmp
+    ip_version: ipv4
+    jump: ACCEPT
+  loop: "{{ cybera_open_icmp_types_codes_ipv4 }}"
+  notify:
+    - Save iptables IPv4 Rules
+    - Save iptables IPv6 Rules
+
 - name: Allow traffic from globally trusted IPv6 sources
   iptables:
     chain: INPUT
