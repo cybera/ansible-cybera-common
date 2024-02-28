@@ -29,6 +29,22 @@ cybera_networks_ipv6_untrusted_global: []
 cybera_open_ports_ipv4: []
 cybera_open_ports_ipv6: []
 
+# Set these values to a list of ICMP types/codes.
+# These are meant to be ICMP types/codes that should be
+# to anyone. For example, echo request (ping)
+# accepted from everyone.
+# ICMP type/code set as a Dict.
+# Dict key is a comment on iptables rule.
+# Dict value is the type/code to allow.
+#
+# Example (from shouldiblockicmp.com):
+#   cybera_open_icmp_types_codes_ipv4:
+#     - echo_request: '8/0'
+#     - echo_reply: '0/0'
+#     - fragmentation_needed: '3/4'
+#     - time_exceeded: '11/0'
+cybera_open_icmp_types_codes_ipv4: []
+
 # Set these values to a list of CIDR subnets.
 # These are meant to be set in a per role/group
 # var file.
