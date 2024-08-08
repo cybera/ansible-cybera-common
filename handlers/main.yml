@@ -51,3 +51,8 @@
     state: saved
     ip_version: ipv6
     path: /etc/iptables/rules.v6
+
+- name: Rebuild GRUB
+  command:
+    cmd: /usr/sbin/update-grub
+  when: not ansible_check_mode

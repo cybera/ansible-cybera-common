@@ -1,0 +1,63 @@
+---
+- name: Configure Serial-Over-Lan (SOL)
+  block:
+  when: ansible_os_family == "Debian"
+    - name: Set GRUB_CMDLINE_LINUX_DEFAULT
+      lineinfile:
+        path: /etc/default/grub
+        line: "GRUB_CMDLINE_LINUX_DEFAULT={{ cybera_sol_grub_linux_default }}"
+      notify: Rebuild GRUB
+
+    - name: Set GRUB_CMDLINE_LINUX
+      lineinfile:
+        path: /etc/default/grub
+        line: "GRUB_CMDLINE_LINUX={{ cybera_sol_grub_linux_default }}"
+      notify: Rebuild GRUB
+
+    - name: Set GRUB_HIDDEN_TIMEOUT_QUIET
+      lineinfile:
+        path: /etc/default/grub
+        line: "GRUB_HIDDEN_TIMEOUT_QUIET=false"
+      notify: Rebuild GRUB
+
+    - name: Set GRUB_TERMINAL
+      lineinfile:
+        path: /etc/default/grub
+        line: "GRUB_TERMINAL=serial"
+      notify: Rebuild GRUB
+
+    - name: Set GRUB_SERIAL_COMMAND"
+      lineinfile:
+        path: /etc/default/grub
+        line: "GRUB_SERIAL_COMMAND=\"serial --speed={{ cybera_sol_baud }} --unit=0 --word=8 --parity=no --stop=1\""
+      notify: Rebuild GRUB
+
+    - name: Manage serial-getty systemd file
+      template:
+        src: sol/serial-getty@ttyS1.service.j2
+        dest: /etc/systemd/system/serial-getty@ttyS1.service
+        owner: root
+        group: root
+        mode: 0644
+      notify: Reload systemd
+
+    - name: Link serial-getty systemd for dependency
+      file:
+        src: /etc/systemd/system/serial-getty@ttyS1.service
+        dest: /etc/systemd/system/serial-getty@ttyS1.service
+        owner: root
+        group: root
+        state: link
+      notify: Reload systemd
+
+    - name: Manage the serial-getty@ttyS1 service
+      systemd:
+        name: serial-getty@ttyS1
+        enabled: yes
+      when: not ansible_check_mode
+
+    - name: Ensure serial-getty@ttyS1 is running
+      systemd:
+        name: serial-getty@ttyS1
+        state: started
+      when: not ansible_check_mode

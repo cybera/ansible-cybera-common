@@ -191,3 +191,8 @@ cybera_sensu_agent_backends: []
 cybera_sensu_agent_trusted_ca_file: ""
 cybera_sensu_agent_config_global: {}
 cybera_sensu_agent_config: {}
+
+# These variables are for serial-over-lan (SOL)
+cybera_sol_baud: 57600
+cybera_sol_grub_linux: "console=tty1 console=ttyS1,57600n8 nosmt l1tf=flush,nosmt mds=full,nosmt"
+cybera_sol_grub_linux_default: ""
