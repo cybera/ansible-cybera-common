@@ -41,7 +41,9 @@ This role can be used in a playbook like so:
 ```
 
 This will cause the `tasks/main.yml` file to trigger, which will subsequently
-run all other plays in the `tasks` directory.
+run nearly all the plays in the `tasks` directory.
+
+Two notable tasks sets are not included by default - sensu_agent and google_authenticator.
 
 If you only want to run specific plays from the `tasks` directory, you will
 need to do something like:
@@ -60,6 +62,35 @@ need to do something like:
         name: "ansible-cybera-common"
         tasks_from: ssh
 ```
+
+#### Sensu Agent
+
+```yaml
+- name: Foo
+  hosts: all
+  tasks:
+    - name: Manage Sensu Agent
+      include_role:
+        name: "ansible-cybera-common"
+        tasks_from: sensu_agent.yml
+```
+
+Sensu's config is then expected as part of the host vars under `cybera_sensu_agent_config`.
+
+#### Google Authenticator
+```yaml
+- name: Foo
+  hosts: all
+  tasks:
+    - name: Manage 2FA TOTP codes
+      include_role:
+        name: "ansible-cybera-common"
+        tasks_from: google_authenticator
+```
+
+This will create a TOTP code for the `ansible_user`. Backup codes will be copied to your computer.
+
+**SAVE THE TOTP AND BACKUP CODES TO YOUR PASSWORD MANAGER**
 
 ## Requirements
 

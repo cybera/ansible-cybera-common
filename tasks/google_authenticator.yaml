@@ -1,0 +1,81 @@
+---
+# Defines tasks applicable for Google Authenticator
+
+- name: Ensure required packages are installed for Google Authenticator
+  apt: pkg={{ item }} state=present
+  with_items:
+    - libpam-google-authenticator
+    - libpam0g-dev
+    - libqrencode3
+
+- name: "Set version of OpenSSH"
+  ansible.builtin.set_fact:
+    openssh_version: "{{ ansible_facts.packages['openssh-server'][0].version[2:] }}"
+
+- name: "Update SSH configuration (8.2 and earlier)"
+  ansible.builtin.lineinfile:
+    dest: "{{ sshd_config }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -T -f %s'
+    mode: 0600
+    backup: yes
+  with_items:
+    - regexp: '(^UsePAM .*)'
+      line: 'UsePAM yes'
+    - regexp: '(^ChallengeResponseAuthentication .*)'
+      line: 'ChallengeResponseAuthentication yes'
+    - regexp: '(^UseDNS .*)'
+      line: 'UseDNS no'
+  when: openssh_version <= '8.2'
+
+- name: "Comment out ChallengeResponseAuthentication from SSH configuration (8.7 and later)"
+  ansible.builtin.lineinfile:
+    path: "{{ sshd_config }}"
+    regexp: '(^ChallengeResponseAuthentication .*)'
+    line: '#ChallengeResponseAuthentication yes'
+    mode: 0600
+    backup: yes
+    state: present
+    validate: 'sshd -T -f %s'
+  when: openssh_version >= '8.7'
+
+- name: "Update SSH configuration (8.7 and later)"
+  ansible.builtin.lineinfile:
+    dest: "{{ sshd_config }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -T -f %s'
+  with_items:
+    - regexp: '(^UsePAM .*)'
+      line: 'UsePAM yes'
+    - regexp: '(^KbdInteractiveAuthentication .*)'
+      line: 'KbdInteractiveAuthentication yes'
+    - regexp: '(^UseDNS .*)'
+      line: 'UseDNS no'
+  when: openssh_version >= '8.7'
+
+- name: Add Google authenticator to PAM
+  lineinfile: dest=/etc/pam.d/sshd
+              line="auth required pam_google_authenticator.so"
+              insertbefore=BOF
+              state=present
+
+- name: Generate a timed-based, no reuse, rate-limited (3 logins per 30 seconds) with one concurrently valid code for default user (ansible_user)
+  command: /usr/local/bin/google-authenticator -t -f -d --label="{{ ansible_user }}@{{ domain }}" --qr-mode=ANSI -r 3 -R 30 -w 1 --secret=/home/{{ ansible_user }}/.google_authenticator
+           creates=/home/{{ ansible_user }}/.google_authenticator
+  sudo: yes
+  sudo_user: "{{ ansible_user }}"
+
+- name: Retrieve generated keys from server
+  fetch: src=/home/{{ ansible_user }}/.google_authenticator
+         dest=/tmp/google-auth-files
+
+- pause: seconds=5
+         prompt="Your Google Authentication keys are in /tmp/google-auth-files. Press any key to restart SSH..."
+
+- name: "Restart SSH Daemon"
+  ansible.builtin.service:
+    name: "{{ ssh_daemon }}"
