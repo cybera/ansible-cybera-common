@@ -44,7 +44,7 @@
     - name: Link serial-getty systemd for dependency
       file:
         src: /etc/systemd/system/serial-getty@ttyS1.service
-        dest: /etc/systemd/system/serial-getty@ttyS1.service
+        dest: /etc/systemd/system/getty.target.wants/serial-getty@ttyS1.service
         owner: root
         group: root
         state: link
