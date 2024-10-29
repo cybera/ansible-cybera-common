@@ -24,6 +24,7 @@
 
 - name: Manage dotfiles
   include_tasks: dotfiles.yml
+  when: cybera_install_dotfiles
 
 - name: Manage IPv6 settings
   include_tasks: ipv6.yml
