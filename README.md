@@ -63,21 +63,24 @@ need to do something like:
         tasks_from: ssh
 ```
 
-#### Sensu Agent
+## Task List
+### Default Tasks
+* `acng` - Managing caching for apt packages. Included by default on Debian machines.
+* `dotfiles` - Installs [Cybera's dotfiles](https://github.com/cybera/dotfiles). Set `cybera_install_dotfiles` to false to disable
+* `iptables` - Firewall rules
+* `ipv6` - IPv6 sysctls for consistent behaviour
+* `packages` - Installs defined packages from variables.
+* `postfix_client` - Default postfix configuration
+* `rsyslog_client` - Default rsyslog configuration
+* `security_updates` - Ensure Ubuntu security updates are enabled
+* `ssh` - Install keys and disable password authentication
+* `systemd` - Tweaks for systemd to prevent it filling the disk
+* `timezone` - Set timezone
+* `ubuntu` - Ubuntu specific items we want to disable
+* `users` - Manage users
 
-```yaml
-- name: Foo
-  hosts: all
-  tasks:
-    - name: Manage Sensu Agent
-      include_role:
-        name: "ansible-cybera-common"
-        tasks_from: sensu_agent.yml
-```
-
-Sensu's config is then expected as part of the host vars under `cybera_sensu_agent_config`.
-
-#### Google Authenticator
+### Optional Tasks
+The optional tasks are *not* run by default and must be manually opted into. For example:
 ```yaml
 - name: Foo
   hosts: all
@@ -88,9 +91,9 @@ Sensu's config is then expected as part of the host vars under `cybera_sensu_age
         tasks_from: google_authenticator
 ```
 
-This will create a TOTP code for the `ansible_user`. Backup codes will be copied to your computer.
-
-**SAVE THE TOTP AND BACKUP CODES TO YOUR PASSWORD MANAGER**
+* `google_authenticator` - Install and configure TOTP using lib-googleauthenticator. The backup codes will be copied to where you are running Ansible from. Be sure to **save the TOTP and Backup codes to your password manager**
+* `sensu_agent` - Install and configure sensu agent. Config is expected to be in `cybera_sensu_agent_config`
+* `sol` - Configure Serial over LAN so the OS will display over SoL
 
 ## Requirements
 
