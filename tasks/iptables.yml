@@ -3,6 +3,47 @@
   package:
     name: iptables-persistent
     state: present
+  when: not cybera_install_iptables_persistent_workaround
+
+- name: Install iptables-persistent workaround
+  when: cybera_install_iptables_persistent_workaround
+  block:
+    - name: create /etc/iptables directory
+      file:
+        name: /etc/iptables
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Install service file
+      copy:
+        src: files/iptables/netfilter-persistent.service
+        dest: /etc/systemd/system/netfilter-persistent.service
+        owner: root
+        group: root
+        mode: 0644
+      notify: Reload systemd
+
+    - name: Install netfilter-persistent script
+      copy:
+        src: files/iptables/netfilter-persistent
+        dest: /usr/local/sbin/netfilter-persistent
+        owner: root
+        group: root
+        mode: 0750
+
+    - name: Manage the netfilter-persistent service
+      systemd:
+        name: netfilter-persistent
+        enabled: yes
+      when: not ansible_check_mode
+
+    - name: Ensure netfilter-persistenet is running
+      systemd:
+        name: netfilter-persistent
+        state: started
+      when: not ansible_check_mode
 
 - name: Ensure iptables is installed
   package:
