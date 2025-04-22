@@ -27,6 +27,30 @@ you can set in your Ansible playbooks.
 You'll need to specify them in either the global `group_vars/all/cybera.yml`
 file or specific to individual roles, such as `group_vars/netbox/cybera.yml`
 
+
+### Tags
+#### User Management
+
+In order to run user management tasks only, `tasks/ssh.yml` and `tasks/users.yml` have a tag named `cybera_user_management`.
+
+To make use of `cybera_user_management`, when incuding the common role in your playbook, also set the tag, for example:
+
+```
+- name: Manage the software configuration of a server
+  hosts:
+    - my_server
+  tasks:
+    - name: Run the Cybera common role
+      include_role:
+        name: common
+      tags: cybera_user_management
+```
+
+And when running the playbook, set the `cybera_user_management` tag to only run user management related tasks:
+```
+ansible-playbook -i inventories/my_server.yml plays/my_server.yml --tags cybera_user_management
+```
+
 ### Within a Playbook
 
 This role can be used in a playbook like so:

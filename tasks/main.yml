@@ -18,9 +18,11 @@
 
 - name: Manage system users
   include_tasks: users.yml
+  tags: cybera_user_management
 
 - name: Manage SSH keys
   include_tasks: ssh.yml
+  tags: cybera_user_management
 
 - name: Manage dotfiles
   include_tasks: dotfiles.yml

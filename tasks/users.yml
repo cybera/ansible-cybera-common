@@ -6,12 +6,14 @@
     remove: true
     force: true
   loop: "{{ cybera_system_users_absent }}"
+  tags: cybera_user_management
 
 - name: Remove specified personal groups
   group:
     name: "{{ item }}"
     state: absent
   loop: "{{ cybera_system_users_absent }}"
+  tags: cybera_user_management
 
 - name: Manage system groups
   group:
@@ -19,6 +21,7 @@
     state: "{{ item.value.state | default('present') }}"
     gid: "{{ item.value.gid | default(omit) }}"
   loop: "{{ cybera_system_users|dict2items }}"
+  tags: cybera_user_management
 
 - name: Manage system users
   user:
@@ -32,6 +35,7 @@
     home: "{{ item.value.home | default(omit) }}"
     create_home: "{{ item.value.create_home | default(False) }}"
   loop: "{{ cybera_system_users|dict2items }}"
+  tags: cybera_user_management
 
 - name: Manage sudo access
   copy:
@@ -44,3 +48,4 @@
     mode: 0440
   loop: "{{ cybera_system_users|dict2items }}"
   when: item.value.sudo|default(false) is true
+  tags: cybera_user_management
