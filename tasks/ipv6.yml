@@ -11,8 +11,8 @@
     value: '0'
     reload: yes
 
-- name: Ensure IPv6 RA's are accepted
+- name: Configure IPv6 Router Advertisement (RA) acceptance
   ansible.posix.sysctl:
     name: net.ipv6.conf.all.accept_ra
-    value: '1'
+    value: '{{ 1 if cybera_sysctl_ipv6_accept_ra else 0 }}'
     reload: yes

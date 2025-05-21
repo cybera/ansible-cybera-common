@@ -203,3 +203,11 @@ cybera_install_dotfiles: true
 # Variable to install a localized version of netfilter-persistent
 # to get around issues where the package causes conflicts
 cybera_install_iptables_persistent_workaround: false
+
+# Variable to install default iptables rules
+# Only disable if you are absolutely sure you know what you are doing.
+# DO NOT disable just to test something.
+cybera_iptables: true
+
+# Control IPv6 Router Advertisement (RA) acceptance
+cybera_sysctl_ipv6_accept_ra: true

@@ -12,6 +12,7 @@
 
 - name: Manage iptables
   include_tasks: iptables.yml
+  when: cybera_iptables
 
 - name: Manage base packages
   include_tasks: packages.yml
