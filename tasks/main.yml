@@ -3,9 +3,16 @@
   include_tasks: acng.yml
   when: ansible_os_family == "Debian"
 
-- name: Refresh package cache
-  package:
+- name: Refresh apt package cache
+  ansible.builtin.apt:
     update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_os_family == "Debian"
+
+- name: Refresh yum package cache
+  ansible.builtin.yum:
+    update_cache: yes
+  when: ansible_os_family == "RedHat"
 
 - name: Manage the system timezone
   include_tasks: timezone.yml

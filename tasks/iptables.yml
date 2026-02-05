@@ -50,6 +50,14 @@
     name: iptables
     state: present
 
+- name: Ensure /etc/iptables exists
+  file:
+    path: /etc/iptables
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
 - name: Allow IPv4 traffic to lo
   iptables:
     chain: INPUT

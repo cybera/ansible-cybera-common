@@ -157,3 +157,7 @@ $ git clone https://git.cybera.ca/cybera/ansible-cybera-common
 $ cd ansible-cybera-common
 $ molecule test
 ```
+
+### CI
+
+This repo includes a GitHub Actions workflow that runs `yamllint`, `ansible-lint`, and `molecule test` on pushes and pull requests. See `.github/workflows/ci.yml`.

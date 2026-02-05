@@ -200,6 +200,9 @@ cybera_sol_grub_linux_default: ""
 # Variables to contol whether dotfiles is installed or not
 cybera_install_dotfiles: true
 
+cybera_dotfiles_repo: "https://github.com/cybera/cybera-dotfiles"
+cybera_dotfiles_version: "master"
+
 # Variable to install a localized version of netfilter-persistent
 # to get around issues where the package causes conflicts
 cybera_install_iptables_persistent_workaround: false

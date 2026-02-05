@@ -1,7 +1,7 @@
 ---
 - name: Configure Serial-Over-Lan (SOL)
-  block:
   when: ansible_os_family == "Debian"
+  block:
     - name: Set GRUB_CMDLINE_LINUX_DEFAULT
       lineinfile:
         path: /etc/default/grub

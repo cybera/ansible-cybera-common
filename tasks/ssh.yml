@@ -11,8 +11,10 @@
 
 - name: Ensure password authentication is disabled for ssh
   lineinfile:
-    dest: /etc/ssh/sshd_config
+    path: /etc/ssh/sshd_config
     regexp: '^#?\s*PasswordAuthentication\s'
     line: 'PasswordAuthentication no'
     state: present
+    validate: 'sshd -t -f %s'
+  notify: Restart SSH daemon
   tags: cybera_user_management
