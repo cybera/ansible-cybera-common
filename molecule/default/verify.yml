@@ -70,11 +70,13 @@
         cmd: "ls -l /root/.tmux.conf.mcjones"
       register: dotfiles_output
       changed_when: false
+      when: cybera_install_dotfiles | default(true) | bool
 
     - name: Verify dotfiles was setup
       ansible.builtin.assert:
         that:
           - "'cybera-dotfiles' in dotfiles_output.stdout"
+      when: cybera_install_dotfiles | default(true) | bool
 
     # Confirm IPv6 sysctl settings
     - name: Get sysctl.conf contents
@@ -104,7 +106,7 @@
     - name: Verify files are removed
       ansible.builtin.assert:
         that:
-          - "'{{ item.stat.exists }}' == 'False'"
+          - not item.stat.exists
       loop: "{{ removed_files_stat.results }}"
 
     # Verify users were removed
@@ -135,7 +137,7 @@
     - name: Verify foo user exist
       ansible.builtin.assert:
         that:
-          - "'{{ user_foo_stats.stat.exists }}' == 'True'"
+          - user_foo_stats.stat.exists
 
     - name: Get user's groups
       ansible.builtin.command:
@@ -156,7 +158,7 @@
     - name: Verify bar user exist
       ansible.builtin.assert:
         that:
-          - "'{{ user_bar_stats.stat.exists }}' == 'True'"
+          - user_bar_stats.stat.exists
 
     - name: Get sudo file
       ansible.builtin.command:

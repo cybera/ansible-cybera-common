@@ -11,6 +11,21 @@
         name: tzdata
       when: ansible_os_family == "Debian"
 
+    - name: Install OpenSSH server
+      ansible.builtin.package:
+        name: openssh-server
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure sshd privilege separation directory exists
+      ansible.builtin.file:
+        path: /run/sshd
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+      when: ansible_os_family == "Debian"
+
     - name: Create group to later remove
       ansible.builtin.group:
         name: jdoe

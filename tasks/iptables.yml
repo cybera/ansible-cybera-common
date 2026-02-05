@@ -59,7 +59,7 @@
     mode: "0755"
 
 - name: Allow IPv4 traffic to lo
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     in_interface: lo
     ip_version: ipv4
@@ -69,7 +69,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow IPv6 traffic to lo
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     in_interface: lo
     ip_version: ipv6
@@ -79,7 +79,7 @@
     - Save iptables IPv6 Rules
 
 - name: Accept all IPv6 ICMP
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     protocol: ipv6-icmp
     ip_version: ipv6
@@ -89,7 +89,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow established traffic from IPv4
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     ctstate: ESTABLISHED,RELATED
     ip_version: ipv4
@@ -99,7 +99,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow established traffic from IPv6
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     ctstate: ESTABLISHED,RELATED
     ip_version: ipv6
@@ -109,7 +109,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from globally trusted IPv4 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -121,7 +121,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from trusted IPv4 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -133,7 +133,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow all IPv4 traffic to open ports
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     destination_port: "{{ (item|dict2items).0.value }}"
     protocol: "{{ (item|dict2items).0.key }}"
@@ -145,7 +145,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow defined IPv4 ICMP types/codes
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     comment: "{{ (item|dict2items).0.key }}"
     icmp_type: "{{ (item|dict2items).0.value }}"
@@ -158,7 +158,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from globally trusted IPv6 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -170,7 +170,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from trusted IPv6 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -182,7 +182,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow all IPv6 traffic to open ports
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     destination_port: "{{ (item|dict2items).0.value }}"
     protocol: "{{ (item|dict2items).0.key }}"
@@ -194,7 +194,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from globally untrusted IPv4 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -206,7 +206,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from untrusted IPv4 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -218,7 +218,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from globally untrusted IPv6 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -230,7 +230,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from untrusted IPv6 sources
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -242,7 +242,7 @@
     - Save iptables IPv6 Rules
 
 - name: Drop all other IPv4 traffic
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     ip_version: ipv4
     policy: DROP
@@ -251,7 +251,7 @@
     - Save iptables IPv6 Rules
 
 - name: Drop all other IPv6 traffic
-  ansible.posix.iptables:
+  ansible.builtin.iptables:
     chain: INPUT
     ip_version: ipv6
     policy: DROP
