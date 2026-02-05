@@ -1,5 +1,5 @@
 skip_list:
 - role-name
-- 104 # Ignore "bare variables"
-- 106 # Ignore "Role name does not match pattern"
-- 305 # Ignore "Use shell only when shell functionality is required"
+- "104" # Ignore "bare variables"
+- "106" # Ignore "Role name does not match pattern"
+- "305" # Ignore "Use shell only when shell functionality is required"
