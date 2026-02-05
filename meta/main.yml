@@ -4,12 +4,12 @@ galaxy_info:
   description: common settings for cybera servers
   company: Cybera
   license: MIT
-  min_ansible_version: 2.10
+  min_ansible_version: "2.10"
   platforms:
-    - name: CentOS
-      versions: [7, 8]
+    - name: EL
+      versions: ["7", "8"]
     - name: Ubuntu
-      versions: [18.04]
+      versions: ["bionic"]
 
   galaxy_tags: []
 

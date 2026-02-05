@@ -10,7 +10,7 @@
   tags: cybera_user_management
 
 - name: Ensure password authentication is disabled for ssh
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     regexp: '^#?\s*PasswordAuthentication\s'
     line: 'PasswordAuthentication no'

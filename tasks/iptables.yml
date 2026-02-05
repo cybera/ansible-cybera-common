@@ -1,6 +1,6 @@
 ---
 - name: Ensure iptables-persistent is installed
-  package:
+  ansible.builtin.package:
     name: iptables-persistent
     state: present
   when: not cybera_install_iptables_persistent_workaround
@@ -8,58 +8,58 @@
 - name: Install iptables-persistent workaround
   when: cybera_install_iptables_persistent_workaround
   block:
-    - name: create /etc/iptables directory
-      file:
+    - name: Create /etc/iptables directory
+      ansible.builtin.file:
         name: /etc/iptables
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
 
     - name: Install service file
-      copy:
+      ansible.builtin.copy:
         src: files/iptables/netfilter-persistent.service
         dest: /etc/systemd/system/netfilter-persistent.service
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       notify: Reload systemd
 
     - name: Install netfilter-persistent script
-      copy:
+      ansible.builtin.copy:
         src: files/iptables/netfilter-persistent
         dest: /usr/local/sbin/netfilter-persistent
         owner: root
         group: root
-        mode: 0750
+        mode: "0750"
 
     - name: Manage the netfilter-persistent service
-      systemd:
+      ansible.builtin.systemd:
         name: netfilter-persistent
         enabled: yes
       when: not ansible_check_mode
 
     - name: Ensure netfilter-persistenet is running
-      systemd:
+      ansible.builtin.systemd:
         name: netfilter-persistent
         state: started
       when: not ansible_check_mode
 
 - name: Ensure iptables is installed
-  package:
+  ansible.builtin.package:
     name: iptables
     state: present
 
 - name: Ensure /etc/iptables exists
-  file:
+  ansible.builtin.file:
     path: /etc/iptables
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
 
 - name: Allow IPv4 traffic to lo
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     in_interface: lo
     ip_version: ipv4
@@ -69,7 +69,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow IPv6 traffic to lo
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     in_interface: lo
     ip_version: ipv6
@@ -79,7 +79,7 @@
     - Save iptables IPv6 Rules
 
 - name: Accept all IPv6 ICMP
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     protocol: ipv6-icmp
     ip_version: ipv6
@@ -89,7 +89,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow established traffic from IPv4
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     ctstate: ESTABLISHED,RELATED
     ip_version: ipv4
@@ -99,7 +99,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow established traffic from IPv6
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     ctstate: ESTABLISHED,RELATED
     ip_version: ipv6
@@ -109,7 +109,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from globally trusted IPv4 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -121,7 +121,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from trusted IPv4 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -133,7 +133,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow all IPv4 traffic to open ports
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     destination_port: "{{ (item|dict2items).0.value }}"
     protocol: "{{ (item|dict2items).0.key }}"
@@ -145,7 +145,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow defined IPv4 ICMP types/codes
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     comment: "{{ (item|dict2items).0.key }}"
     icmp_type: "{{ (item|dict2items).0.value }}"
@@ -158,7 +158,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from globally trusted IPv6 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -170,7 +170,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow traffic from trusted IPv6 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -182,7 +182,7 @@
     - Save iptables IPv6 Rules
 
 - name: Allow all IPv6 traffic to open ports
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     destination_port: "{{ (item|dict2items).0.value }}"
     protocol: "{{ (item|dict2items).0.key }}"
@@ -194,7 +194,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from globally untrusted IPv4 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -206,7 +206,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from untrusted IPv4 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -218,7 +218,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from globally untrusted IPv6 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -230,7 +230,7 @@
     - Save iptables IPv6 Rules
 
 - name: Deny traffic from untrusted IPv6 sources
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     source: "{{ item }}"
     protocol: all
@@ -242,7 +242,7 @@
     - Save iptables IPv6 Rules
 
 - name: Drop all other IPv4 traffic
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     ip_version: ipv4
     policy: DROP
@@ -251,7 +251,7 @@
     - Save iptables IPv6 Rules
 
 - name: Drop all other IPv6 traffic
-  iptables:
+  ansible.posix.iptables:
     chain: INPUT
     ip_version: ipv6
     policy: DROP

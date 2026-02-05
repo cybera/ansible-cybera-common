@@ -1,11 +1,11 @@
 ---
 - name: Install Postfix
-  package:
+  ansible.builtin.package:
     name: postfix
     state: present
 
 - name: Manage Postfix config file
-  template:
+  ansible.builtin.template:
     src: templates/postfix/main-client.cf.j2
     dest: /etc/postfix/main.cf
     owner: root
@@ -14,7 +14,7 @@
   notify: Restart postfix
 
 - name: Manage mail aliases
-  template:
+  ansible.builtin.template:
     src: templates/postfix/aliases.j2
     dest: /etc/aliases
     owner: root

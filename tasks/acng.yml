@@ -1,6 +1,6 @@
 ---
 - name: Configure apt caching on the server
-  copy:
+  ansible.builtin.copy:
     dest: '/etc/apt/apt.conf.d/01apt-cacher-ng-proxy'
     owner: root
     group: root

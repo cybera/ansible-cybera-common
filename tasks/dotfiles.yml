@@ -1,6 +1,6 @@
 ---
 - name: Manage cybera-dotfiles git repository
-  git:
+  ansible.builtin.git:
     repo: "{{ cybera_dotfiles_repo }}"
     dest: /root/cybera-dotfiles
     version: "{{ cybera_dotfiles_version }}"

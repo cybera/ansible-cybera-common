@@ -3,21 +3,21 @@
 
   tasks:
     - name: Refresh package cache
-      package:
+      ansible.builtin.package:
         update_cache: yes
 
     - name: Install tzdata
-      package:
+      ansible.builtin.package:
         name: tzdata
       when: ansible_os_family == "Debian"
 
     - name: Create group to later remove
-      group:
+      ansible.builtin.group:
         name: jdoe
         gid: "1001"
 
     - name: Create user to later remove
-      user:
+      ansible.builtin.user:
         name: jdoe
         state: present
         uid: "1001"
@@ -27,7 +27,7 @@
         create_home: true
 
     - name: Ensure the sudo group exists
-      group:
+      ansible.builtin.group:
         name: sudo
         gid: "27"
         state: present

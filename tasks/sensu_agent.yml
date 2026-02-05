@@ -1,17 +1,18 @@
 ---
 - name: Configure Sensu Agent (Debian)
+  when: ansible_os_family == "Debian"
   block:
     - name: Install Sensu Agent package
-      apt:
+      ansible.builtin.apt:
         deb: "{{ cybera_sensu_agent_package_url }}"
 
     - name: Manage Sensu group
-      group:
+      ansible.builtin.group:
         name: sensu
         gid: 9999
 
     - name: Manage Sensu user
-      user:
+      ansible.builtin.user:
         name: sensu
         uid: 9999
         group: sensu
@@ -21,50 +22,50 @@
         create_home: False
 
     - name: Manage /etc/sensu
-      file:
+      ansible.builtin.file:
         name: /etc/sensu
         state: directory
         owner: sensu
         group: sensu
-        mode: 0750
+        mode: "0750"
 
     - name: Manage /etc/sensu/ssl
-      file:
+      ansible.builtin.file:
         name: /etc/sensu/ssl
         state: directory
         owner: sensu
         group: sensu
-        mode: 0750
+        mode: "0750"
 
     - name: Manage /var/lib/sensu permissions
-      file:
+      ansible.builtin.file:
         name: /var/lib/sensu
         state: directory
         owner: sensu
         group: sensu
-        mode: 0750
+        mode: "0750"
         recurse: yes
 
     - name: Manage /var/cache/sensu permissions
-      file:
+      ansible.builtin.file:
         name: /var/cache/sensu
         state: directory
         owner: sensu
         group: sensu
-        mode: 0750
+        mode: "0750"
         recurse: yes
 
     - name: Manage /var/log/sensu permissions
-      file:
+      ansible.builtin.file:
         name: /var/log/sensu
         state: directory
         owner: sensu
         group: sensu
-        mode: 0750
+        mode: "0750"
         recurse: yes
 
     - name: Install trusted CA file
-      copy:
+      ansible.builtin.copy:
         src: "{{ cybera_sensu_agent_trusted_ca_file }}"
         dest: "/etc/sensu/sensu-agent-trusted-ca.crt"
         owner: sensu
@@ -73,16 +74,16 @@
       notify: Restart Sensu Agent
 
     - name: Configure Sensu
-      template:
+      ansible.builtin.template:
         src: sensu/agent.yml.j2
         dest: /etc/sensu/agent.yml
         owner: sensu
         group: sensu
-        mode: 0640
+        mode: "0640"
       notify: Restart Sensu Agent
 
     - name: Manage the systemd unit file
-      copy:
+      ansible.builtin.copy:
         src: files/sensu/sensu-agent.service
         dest: /etc/systemd/system/sensu-agent.service
         owner: root
@@ -94,14 +95,14 @@
       register: sensu_systemd
 
     - name: Manage the sensu-agent service
-      systemd:
+      ansible.builtin.systemd:
         name: sensu-agent
         enabled: yes
         masked: no
       when: not ansible_check_mode
 
     - name: Ensure sensu-agent is started
-      systemd:
+      ansible.builtin.systemd:
         name: sensu-agent
         state: started
       when: not ansible_check_mode

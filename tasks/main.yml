@@ -1,6 +1,6 @@
 ---
 - name: Manage acng
-  include_tasks: acng.yml
+  ansible.builtin.include_tasks: acng.yml
   when: ansible_os_family == "Debian"
 
 - name: Refresh apt package cache
@@ -15,45 +15,45 @@
   when: ansible_os_family == "RedHat"
 
 - name: Manage the system timezone
-  include_tasks: timezone.yml
+  ansible.builtin.include_tasks: timezone.yml
 
 - name: Manage iptables
-  include_tasks: iptables.yml
+  ansible.builtin.include_tasks: iptables.yml
   when: cybera_iptables
 
 - name: Manage base packages
-  include_tasks: packages.yml
+  ansible.builtin.include_tasks: packages.yml
 
 - name: Manage system users
-  include_tasks: users.yml
+  ansible.builtin.include_tasks: users.yml
   tags: cybera_user_management
 
 - name: Manage SSH keys
-  include_tasks: ssh.yml
+  ansible.builtin.include_tasks: ssh.yml
   tags: cybera_user_management
 
 - name: Manage dotfiles
-  include_tasks: dotfiles.yml
+  ansible.builtin.include_tasks: dotfiles.yml
   when: cybera_install_dotfiles
 
 - name: Manage IPv6 settings
-  include_tasks: ipv6.yml
+  ansible.builtin.include_tasks: ipv6.yml
 
 - name: Manage systemd
-  include_tasks: systemd.yml
+  ansible.builtin.include_tasks: systemd.yml
 
 - name: Manage ubuntu quirks
-  include_tasks: ubuntu.yml
+  ansible.builtin.include_tasks: ubuntu.yml
   when: ansible_os_family == "Debian"
 
 - name: Manage automatic security updates
-  include_tasks: security_updates.yml
+  ansible.builtin.include_tasks: security_updates.yml
 
 - name: Manage rsyslog client
-  include_tasks: rsyslog_client.yml
+  ansible.builtin.include_tasks: rsyslog_client.yml
 
 - name: Manage Postfix and mail aliases
-  include_tasks: postfix_client.yml
+  ansible.builtin.include_tasks: postfix_client.yml
 
 - name: Flush handlers
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

@@ -1,6 +1,6 @@
 ---
 - name: Configure systemd SystemMaxUse
-  ini_file:
+  ansible.builtin.ini_file:
     path: /etc/systemd/journald.conf
     section: Journal
     option: SystemMaxUse
@@ -9,7 +9,7 @@
   notify: Restart journald
 
 - name: Configure systemd RuntimeMaxUse
-  ini_file:
+  ansible.builtin.ini_file:
     path: /etc/systemd/journald.conf
     section: Journal
     option: RuntimeMaxUse

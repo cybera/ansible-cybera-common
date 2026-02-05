@@ -1,18 +1,19 @@
 ---
 - name: Configure rsyslog client (Debian)
+  when: ansible_os_family == "Debian"
   block:
     - name: Install rsyslog
-      package:
+      ansible.builtin.package:
         name: rsyslog
         state: present
 
     - name: Install rsyslog-gnutls
-      package:
+      ansible.builtin.package:
         name: rsyslog-gnutls
         state: present
 
     - name: Copy rsyslog SSL CA file
-      copy:
+      ansible.builtin.copy:
         src: "{{ cybera_rsyslog_ssl_ca_file_src }}"
         dest: "{{ cybera_rsyslog_ssl_ca_file }}"
         owner: root
@@ -21,7 +22,7 @@
       when: cybera_rsyslog_ssl_ca_file_src and cybera_rsyslog_ssl_ca_file
 
     - name: Copy rsyslog.conf file
-      copy:
+      ansible.builtin.copy:
         src: files/rsyslog/rsyslog.conf
         dest: /etc/rsyslog.conf
         owner: root
@@ -30,11 +31,10 @@
       notify: Restart rsyslog
 
     - name: Copy rsyslog client.conf file
-      template:
+      ansible.builtin.template:
         src: templates/rsyslog/client.conf.j2
         dest: /etc/rsyslog.d/client.conf
         owner: root
         group: root
         mode: "0644"
       notify: Restart rsyslog
-  when: ansible_os_family == "Debian"

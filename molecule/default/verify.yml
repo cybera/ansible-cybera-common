@@ -4,82 +4,94 @@
   gather_facts: true
   tasks:
     - name: Include test data
-      include_vars: vars.yml
+      ansible.builtin.include_vars: vars.yml
 
     # Confirm SSH keys
     - name: Get SSH authorized_keys file
-      shell: "cat /root/.ssh/authorized_keys"
+      ansible.builtin.command:
+        cmd: "cat /root/.ssh/authorized_keys"
       register: authorized_keys_output
+      changed_when: false
 
     - name: Verify SSH keys are installed
-      assert:
+      ansible.builtin.assert:
         that:
           - "'foo' in authorized_keys_output.stdout"
           - "'bar' in authorized_keys_output.stdout"
 
     # Confirm iptables rules
     - name: List iptables rules
-      shell: "iptables-save"
+      ansible.builtin.command:
+        cmd: "iptables-save"
       register: iptables_save_output
+      changed_when: false
 
     - name: Verify iptables networks are configured correctly
-      assert:
+      ansible.builtin.assert:
         that:
           - "'{{ item }} -j ACCEPT' in iptables_save_output.stdout"
       loop: "{{ cybera_networks_ipv4_trusted_global | zip(cybera_networks_ipv4_trusted) | flatten }}"
 
     - name: Verify iptables ports configured correctly
-      assert:
+      ansible.builtin.assert:
         that:
           - "'--dport {{ (item|dict2items).0.value }} -j ACCEPT' in iptables_save_output.stdout"
       loop: "{{ cybera_open_ports_ipv4 }}"
 
     # Confirm package installation
     - name: List curl package
-      shell: which curl
+      ansible.builtin.command:
+        cmd: which curl
       register: curl_output
+      changed_when: false
 
     - name: Verify curl is correctly installed
-      assert:
+      ansible.builtin.assert:
         that:
           - "'curl' in curl_output.stdout"
 
     # Confirm acng
     - name: Get acng file contents
-      shell: "cat /etc/apt/apt.conf.d/01apt-cacher-ng-proxy"
+      ansible.builtin.command:
+        cmd: "cat /etc/apt/apt.conf.d/01apt-cacher-ng-proxy"
       register: acng_output
+      changed_when: false
       when: ansible_os_family == "Debian"
 
     - name: Verify acng is configured correctly
-      assert:
+      ansible.builtin.assert:
         that:
           - "'Acquire::http { Proxy \"http://acng-yyc.cloud.cybera.ca:3142\"; };' in acng_output.stdout"
       when: ansible_os_family == "Debian"
 
     # Confirm dotfiles
     - name: Check if tmux.conf.mcjones exists
-      shell: "ls -l /root/.tmux.conf.mcjones"
+      ansible.builtin.command:
+        cmd: "ls -l /root/.tmux.conf.mcjones"
       register: dotfiles_output
+      changed_when: false
 
     - name: Verify dotfiles was setup
-      assert:
+      ansible.builtin.assert:
         that:
           - "'cybera-dotfiles' in dotfiles_output.stdout"
 
     # Confirm IPv6 sysctl settings
     - name: Get sysctl.conf contents
-      shell: "sysctl -a"
+      ansible.builtin.command:
+        cmd: "sysctl -a"
       register: sysctl_output
+      changed_when: false
 
     - name: Verify IPv6 sysctl settings
-      assert:
+      ansible.builtin.assert:
         that:
           - "'net.ipv6.conf.all.use_tempaddr = 0' in sysctl_output.stdout"
           - "'net.ipv6.conf.all.accept_ra = 1' in sysctl_output.stdout"
 
     # Verify Ubuntu quirks
     - name: Check for removed files
-      stat:
+      ansible.builtin.stat:
         path: "{{ item }}"
       loop:
         - "/etc/cron.weekly/update-notifier-common"
@@ -90,91 +102,105 @@
       register: removed_files_stat
 
     - name: Verify files are removed
-      assert:
+      ansible.builtin.assert:
         that:
           - "'{{ item.stat.exists }}' == 'False'"
       loop: "{{ removed_files_stat.results }}"
 
     # Verify users were removed
     - name: Get contents of /etc/group
-      shell: "cat /etc/group"
+      ansible.builtin.command:
+        cmd: "cat /etc/group"
       register: etc_group_output
+      changed_when: false
 
     - name: Get contents of /etc/passwd
-      shell: "cat /etc/passwd"
+      ansible.builtin.command:
+        cmd: "cat /etc/passwd"
       register: etc_passwd_output
+      changed_when: false
 
     - name: Verify jdoe user does not exist
-      assert:
+      ansible.builtin.assert:
         that:
           - "'jdoe' not in etc_group_output.stdout"
           - "'jdoe' not in etc_passwd_output.stdout"
 
     # Verify users exist
     - name: Check for foo home directory
-      stat:
+      ansible.builtin.stat:
         path: "/home/foo"
       register: user_foo_stats
 
     - name: Verify foo user exist
-      assert:
+      ansible.builtin.assert:
         that:
           - "'{{ user_foo_stats.stat.exists }}' == 'True'"
 
     - name: Get user's groups
-      shell: "groups foo"
+      ansible.builtin.command:
+        cmd: "groups foo"
       register: user_foo_groups
+      changed_when: false
 
     - name: Verify user's groups
-      assert:
+      ansible.builtin.assert:
         that:
           - "'sudo' in user_foo_groups.stdout"
 
     - name: Check for bar home directory
-      stat:
+      ansible.builtin.stat:
         path: "/opt/bar"
       register: user_bar_stats
 
     - name: Verify bar user exist
-      assert:
+      ansible.builtin.assert:
         that:
           - "'{{ user_bar_stats.stat.exists }}' == 'True'"
 
     - name: Get sudo file
-      shell: "cat /etc/sudoers.d/foo"
+      ansible.builtin.command:
+        cmd: "cat /etc/sudoers.d/foo"
       register: sudoers_file
+      changed_when: false
 
     - name: Verify sudo access
-      assert:
+      ansible.builtin.assert:
         that:
           - "'foo ALL' in sudoers_file.stdout"
 
     - name: Capture rsyslog client.conf file
-      shell: "cat /etc/rsyslog.d/client.conf"
+      ansible.builtin.command:
+        cmd: "cat /etc/rsyslog.d/client.conf"
       register: rsyslog_client_conf
+      changed_when: false
       when: ansible_os_family == "Debian"
 
     - name: Verify rsyslog client settings
-      assert:
+      ansible.builtin.assert:
         that:
           - "'/etc/ssl/certs/rsyslog.crt' in rsyslog_client_conf.stdout"
           - "'localhost' in rsyslog_client_conf.stdout"
       when: ansible_os_family == "Debian"
 
     - name: Capture postfix configuration file
-      shell: "cat /etc/postfix/main.cf"
+      ansible.builtin.command:
+        cmd: "cat /etc/postfix/main.cf"
       register: postfix_main_cf
+      changed_when: false
 
     - name: Verify relay host was set
-      assert:
+      ansible.builtin.assert:
         that:
           - "'relayhost = example.com' in postfix_main_cf.stdout"
 
     - name: Capture mail aliases
-      shell: "cat /etc/aliases"
+      ansible.builtin.command:
+        cmd: "cat /etc/aliases"
       register: mail_aliases
+      changed_when: false
 
     - name: Verify mail aliases were set
-      assert:
+      ansible.builtin.assert:
         that:
           - "'root: john.doe@example.com, jane.doe@example.com, jack.doe@example.com' in mail_aliases.stdout"

@@ -1,4 +1,4 @@
 - name: Manage the timezone
   community.general.timezone:
     name: "{{ cybera_timezone }}"
-  when: cybera_timezone|length > 0
+  when: cybera_timezone | length > 0

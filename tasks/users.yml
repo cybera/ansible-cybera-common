@@ -1,6 +1,6 @@
 ---
 - name: Remove specified users
-  user:
+  ansible.builtin.user:
     name: "{{ item }}"
     state: absent
     remove: true
@@ -9,22 +9,22 @@
   tags: cybera_user_management
 
 - name: Remove specified personal groups
-  group:
+  ansible.builtin.group:
     name: "{{ item }}"
     state: absent
   loop: "{{ cybera_system_users_absent }}"
   tags: cybera_user_management
 
 - name: Manage system groups
-  group:
+  ansible.builtin.group:
     name: "{{ item.key }}"
     state: "{{ item.value.state | default('present') }}"
     gid: "{{ item.value.gid | default(omit) }}"
-  loop: "{{ cybera_system_users|dict2items }}"
+  loop: "{{ cybera_system_users | dict2items }}"
   tags: cybera_user_management
 
 - name: Manage system users
-  user:
+  ansible.builtin.user:
     name: "{{ item.key }}"
     state: "{{ item.value.state | default('present') }}"
     uid: "{{ item.value.uid | default(omit) }}"
@@ -34,18 +34,18 @@
     password: "{{ item.value.password | default('*') }}"
     home: "{{ item.value.home | default(omit) }}"
     create_home: "{{ item.value.create_home | default(False) }}"
-  loop: "{{ cybera_system_users|dict2items }}"
+  loop: "{{ cybera_system_users | dict2items }}"
   tags: cybera_user_management
 
 - name: Manage sudo access
-  copy:
+  ansible.builtin.copy:
     dest: "/etc/sudoers.d/{{ item.key }}"
     content: |
       # User rules for {{ item.key }}
       {{ item.key }} ALL=(ALL) NOPASSWD:ALL
     owner: root
     group: root
-    mode: 0440
-  loop: "{{ cybera_system_users|dict2items }}"
+    mode: "0440"
+  loop: "{{ cybera_system_users | dict2items }}"
   when: item.value.sudo|default(false) is true
   tags: cybera_user_management
