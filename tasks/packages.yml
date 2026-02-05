@@ -14,14 +14,14 @@
   when: ansible_os_family == "Debian"
 
 - name: Install globally common packages (RedHat)
-  ansible.builtin.yum:
+  ansible.builtin.package:
     name: "{{ item.key }}"
     state: "{{ item.value }}"
   loop: "{{ cybera_packages_redhat_global | dict2items }}"
   when: ansible_os_family == "RedHat"
 
 - name: Install common packages (RedHat)
-  ansible.builtin.yum:
+  ansible.builtin.package:
     name: "{{ item.key }}"
     state: "{{ item.value }}"
   loop: "{{ cybera_packages_redhat | dict2items }}"
