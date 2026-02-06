@@ -3,8 +3,9 @@
 
   tasks:
     - name: Refresh package cache
-      ansible.builtin.package:
+      ansible.builtin.apt:
         update_cache: yes
+      when: ansible_distribution == "Ubuntu"
 
     - name: Install tzdata
       ansible.builtin.package:

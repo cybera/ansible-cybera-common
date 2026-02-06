@@ -1,34 +1,39 @@
 ---
 - name: Configure Serial-Over-Lan (SOL)
-  when: ansible_os_family == "Debian"
+  when: ansible_distribution == "Ubuntu"
   block:
     - name: Set GRUB_CMDLINE_LINUX_DEFAULT
       ansible.builtin.lineinfile:
         path: /etc/default/grub
+        regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
         line: "GRUB_CMDLINE_LINUX_DEFAULT={{ cybera_sol_grub_linux_default }}"
       notify: Rebuild GRUB
 
     - name: Set GRUB_CMDLINE_LINUX
       ansible.builtin.lineinfile:
         path: /etc/default/grub
-        line: "GRUB_CMDLINE_LINUX={{ cybera_sol_grub_linux_default }}"
+        regexp: '^GRUB_CMDLINE_LINUX='
+        line: "GRUB_CMDLINE_LINUX={{ cybera_sol_grub_linux }}"
       notify: Rebuild GRUB
 
     - name: Set GRUB_HIDDEN_TIMEOUT_QUIET
       ansible.builtin.lineinfile:
         path: /etc/default/grub
+        regexp: '^GRUB_HIDDEN_TIMEOUT_QUIET='
         line: "GRUB_HIDDEN_TIMEOUT_QUIET=false"
       notify: Rebuild GRUB
 
     - name: Set GRUB_TERMINAL
       ansible.builtin.lineinfile:
         path: /etc/default/grub
+        regexp: '^GRUB_TERMINAL='
         line: "GRUB_TERMINAL=serial"
       notify: Rebuild GRUB
 
-    - name: Set GRUB_SERIAL_COMMAND"
+    - name: Set GRUB_SERIAL_COMMAND
       ansible.builtin.lineinfile:
         path: /etc/default/grub
+        regexp: '^GRUB_SERIAL_COMMAND='
         line: "GRUB_SERIAL_COMMAND=\"serial --speed={{ cybera_sol_baud }} --unit=0 --word=8 --parity=no --stop=1\""
       notify: Rebuild GRUB
 

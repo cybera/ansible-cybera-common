@@ -2,13 +2,13 @@
 
 This role does the following:
 
-* Configures a server to use an upstream apt-caching server (Debian/Ubuntu only).
+* Configures a server to use an upstream apt-caching server (Ubuntu only).
 * Clones and installs https://github.com/cybera/cybera-dotfiles.
 * Configures iptables to be a deny-by-default firewall.
 * Whitelists and blacklists specified IPv4 and IPv6 subnets.
 * Configures IPv6 RAs and temp addresses.
 * Installs and removes a specified set of packages.
-* Configures the server for automated security updates (Debian/Ubuntu only).
+* Configures the server for automated security updates (Ubuntu only).
 * Manages SSH authorized keys.
 * Configures systemd journal.
 * Applies a set of Ubuntu quirk fixes.
@@ -89,7 +89,7 @@ need to do something like:
 
 ## Task List
 ### Default Tasks
-* `acng` - Managing caching for apt packages. Included by default on Debian machines.
+* `acng` - Managing caching for apt packages. Included by default on Ubuntu machines.
 * `dotfiles` - Installs [Cybera's dotfiles](https://github.com/cybera/dotfiles). Set `cybera_install_dotfiles` to false to disable
 * `iptables` - Firewall rules
 * `ipv6` - IPv6 sysctls for consistent behaviour

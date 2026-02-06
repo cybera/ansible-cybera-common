@@ -1,8 +1,8 @@
 ---
 # Defines tasks applicable for Google Authenticator
 
-- name: Configure Google Authenticator 2FA (Debian)
-  when: ansible_os_family == "Debian"
+- name: Configure Google Authenticator 2FA (Ubuntu)
+  when: ansible_distribution == "Ubuntu"
   block:
     - name: Ensure required packages are installed for Google Authenticator
       ansible.builtin.apt:

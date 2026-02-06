@@ -27,7 +27,9 @@
 - name: Set CHECK_LOSTFOUND=0 in /etc/default/cron
   ansible.builtin.lineinfile:
     path: /etc/default/cron
+    regexp: '^CHECK_LOSTFOUND='
     line: 'CHECK_LOSTFOUND=no'
+    create: false
 
 - name: Configure unattended-upgrades log rotation
   ansible.builtin.copy:

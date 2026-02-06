@@ -7,4 +7,7 @@
     mode: '0644'
     content: |
       Acquire::http { Proxy "http://{{ cybera_acng_server }}:3142"; };
-  when: (cybera_acng_server is defined and cybera_acng_server|length > 0)
+  when:
+    - ansible_distribution == "Ubuntu"
+    - cybera_acng_server is defined
+    - cybera_acng_server | length > 0

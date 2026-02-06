@@ -1,5 +1,5 @@
 ---
-- name: Configure automatic security updates (Debian)
+- name: Configure automatic security updates (Ubuntu)
   ansible.builtin.copy:
     dest: /etc/apt/apt.conf.d/20auto-upgrades
     owner: root
@@ -8,4 +8,4 @@
     content: |
       APT::Periodic::Update-Package-Lists "1";
       APT::Periodic::Unattended-Upgrade "1";
-  when: ansible_os_family == "Debian"
+  when: ansible_distribution == "Ubuntu"

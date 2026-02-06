@@ -1,6 +1,6 @@
 ---
-- name: Configure rsyslog client (Debian)
-  when: ansible_os_family == "Debian"
+- name: Configure rsyslog client (Ubuntu)
+  when: ansible_distribution == "Ubuntu"
   block:
     - name: Install rsyslog
       ansible.builtin.package:

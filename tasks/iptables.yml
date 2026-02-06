@@ -3,10 +3,14 @@
   ansible.builtin.package:
     name: iptables-persistent
     state: present
-  when: not cybera_install_iptables_persistent_workaround
+  when:
+    - ansible_distribution == "Ubuntu"
+    - not cybera_install_iptables_persistent_workaround
 
 - name: Install iptables-persistent workaround
-  when: cybera_install_iptables_persistent_workaround
+  when:
+    - ansible_distribution == "Ubuntu"
+    - cybera_install_iptables_persistent_workaround
   block:
     - name: Create /etc/iptables directory
       ansible.builtin.file:

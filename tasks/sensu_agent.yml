@@ -1,7 +1,13 @@
 ---
-- name: Configure Sensu Agent (Debian)
-  when: ansible_os_family == "Debian"
+- name: Configure Sensu Agent (Ubuntu)
+  when: ansible_distribution == "Ubuntu"
   block:
+    - name: Validate required Sensu variables
+      ansible.builtin.assert:
+        that:
+          - cybera_sensu_agent_package_url | length > 0
+        fail_msg: "cybera_sensu_agent_package_url must be set when configuring Sensu Agent."
+
     - name: Install Sensu Agent package
       ansible.builtin.apt:
         deb: "{{ cybera_sensu_agent_package_url }}"
@@ -9,15 +15,15 @@
     - name: Manage Sensu group
       ansible.builtin.group:
         name: sensu
-        gid: 9999
+        gid: "{{ cybera_sensu_agent_gid }}"
 
     - name: Manage Sensu user
       ansible.builtin.user:
         name: sensu
-        uid: 9999
+        uid: "{{ cybera_sensu_agent_uid }}"
         group: sensu
         shell: /usr/sbin/nologin
-        password: '*'
+        password: "{{ cybera_sensu_agent_password | default('*', true) }}"
         home: /var/lib/sensu
         create_home: False
 
@@ -71,6 +77,7 @@
         owner: sensu
         group: sensu
         mode: "0640"
+      when: cybera_sensu_agent_trusted_ca_file | length > 0
       notify: Restart Sensu Agent
 
     - name: Configure Sensu
@@ -92,7 +99,6 @@
       notify:
         - Restart Sensu Agent
         - Reload systemd
-      register: sensu_systemd
 
     - name: Manage the sensu-agent service
       ansible.builtin.systemd:

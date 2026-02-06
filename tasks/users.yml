@@ -46,6 +46,24 @@
     owner: root
     group: root
     mode: "0440"
+    validate: /usr/sbin/visudo -cf %s
   loop: "{{ cybera_system_users | dict2items }}"
-  when: item.value.sudo|default(false) is true
+  when:
+    - item.value.sudo | default(false) is true
+    - item.value.state | default('present') == 'present'
+  tags: cybera_user_management
+
+- name: Remove sudo access when disabled
+  ansible.builtin.file:
+    path: "/etc/sudoers.d/{{ item.key }}"
+    state: absent
+  loop: "{{ cybera_system_users | dict2items }}"
+  when: item.value.sudo | default(false) is not true
+  tags: cybera_user_management
+
+- name: Remove sudo access for deleted users
+  ansible.builtin.file:
+    path: "/etc/sudoers.d/{{ item }}"
+    state: absent
+  loop: "{{ cybera_system_users_absent }}"
   tags: cybera_user_management
