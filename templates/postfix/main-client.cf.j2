@@ -27,11 +27,12 @@ readme_directory = no
 # See /usr/share/doc/postfix/TLS_README.gz in the postfix-doc package for
 # information on enabling SSL in the smtp client.
 
-myhostname = {{ ansible_facts['ansible_fqdn'] | default('localhost') }}
+{% set _pf_host = cybera_postfix_myhostname if (cybera_postfix_myhostname | default('') | length > 0) else (ansible_facts['ansible_fqdn'] | default('localhost')) %}
+myhostname = {{ _pf_host }}
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
-myorigin = {{ ansible_facts['ansible_fqdn'] | default('localhost') }}
-mydestination = {{ ansible_facts['ansible_fqdn'] | default('localhost') }}, localhost
+myorigin = {{ _pf_host }}
+mydestination = {{ _pf_host }}{% if cybera_postfix_mydomain | default('') | length > 0 %}, localhost.{{ cybera_postfix_mydomain }}{% endif %}, localhost
 inet_interfaces = loopback-only
 
 {% if cybera_postfix_relayhost -%}
@@ -40,6 +41,6 @@ relayhost = {{ cybera_postfix_relayhost }}
 
 mailbox_size_limit = 0
 recipient_delimiter = +
-inet_protocols = ipv4
+inet_protocols = {{ cybera_postfix_inet_protocols | default('ipv4') }}
 
 compatibility_level=2

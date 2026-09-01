@@ -167,6 +167,16 @@ cybera_rsyslog_upstream_server: ""
 
 # These variables configure postfix client on a node.
 #
+# Optional custom identity for hosts where the fqdn fact is unreliable or
+# where the default mydestination is insufficient. Leave empty to derive from
+# ansible_fqdn as before.
+#   cybera_postfix_myhostname: mail.example.org
+#   cybera_postfix_mydomain: example.org   (adds "localhost.<domain>" to mydestination)
+#   cybera_postfix_inet_protocols: all
+cybera_postfix_myhostname: ""
+cybera_postfix_mydomain: ""
+cybera_postfix_inet_protocols: ipv4
+#
 # Example:
 #   cybera_mail_aliases_global:
 #     root:
