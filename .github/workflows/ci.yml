@@ -27,7 +27,7 @@ jobs:
             "ansible-core>=2.15,<2.18" \
             "molecule>=6,<7" \
             "molecule-plugins[docker]" \
-            "ansible-lint" \
+            "ansible-lint~=26.10" \
             "yamllint"
 
       - name: Install Ansible collections
