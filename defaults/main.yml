@@ -224,3 +224,8 @@ cybera_iptables: true
 
 # Control IPv6 Router Advertisement (RA) acceptance
 cybera_sysctl_ipv6_accept_ra: true
+
+# Run the sysstat collector. Set false on containers: sadc grows without bound inside an
+# LXC container and starves whatever else runs there. See tasks/sysstat.yml for the two
+# occurrences that put this here.
+cybera_sysstat_enabled: true

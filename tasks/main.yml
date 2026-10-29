@@ -25,6 +25,12 @@
 - name: Manage base packages
   ansible.builtin.include_tasks: packages.yml
 
+- name: Manage sysstat collection
+  ansible.builtin.include_tasks: sysstat.yml
+  when:
+    - ansible_distribution == "Ubuntu"
+    - not (cybera_sysstat_enabled | bool)
+
 - name: Manage system users
   ansible.builtin.include_tasks: users.yml
   tags: cybera_user_management

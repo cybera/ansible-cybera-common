@@ -1,0 +1,23 @@
+---
+# The noble LXD image ships sysstat with its collection timer enabled. Inside a
+# container sadc grows without bound: 5.8 GB RSS in the netbox container and 3.6 GB in
+# the mcp container, each within a 4 GB limit and OOM-killed in a loop. While it grows it
+# starves whatever else the container runs and the symptom looks like the application
+# hanging: on 2026-10-29 the MCP servers stopped answering, the gateway reported
+# "upstream call timeout", and the cause was 3.6 GB of sadc.
+#
+# Set cybera_sysstat_enabled to false on containers. Masked rather than merely disabled:
+# stopping the timer leaves the live collector holding the memory, and a oneshot that is
+# mid-activation when the timer stops re-triggers a minute later. The service goes first
+# so the running collector dies before the timers that would start it again.
+- name: Stop and mask sysstat collection
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    masked: true
+  loop:
+    - sysstat-collect.service
+    - sysstat-collect.timer
+    - sysstat-summary.timer
+    - sysstat.service
+  failed_when: false
