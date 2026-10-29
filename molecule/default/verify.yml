@@ -50,19 +50,40 @@
         that:
           - "'curl' in curl_output.stdout"
 
-    # Confirm acng
-    - name: Get acng file contents
+    # Confirm the apt proxy. This scenario keeps cybera_acng_server empty, because a
+    # CI runner cannot reach the Cybera cache and a proxy it cannot reach fails every
+    # package install that follows. Both branches are asserted so the scenario stays
+    # honest if someone points it at a reachable cache.
+    - name: Check whether an apt proxy is configured
+      ansible.builtin.stat:
+        path: /etc/apt/apt.conf.d/01apt-cacher-ng-proxy
+      register: acng_config
+      when: ansible_os_family == "Debian"
+
+    - name: Verify no apt proxy is configured
+      ansible.builtin.assert:
+        that:
+          - not acng_config.stat.exists
+      when:
+        - ansible_os_family == "Debian"
+        - cybera_acng_server | default('') | length == 0
+
+    - name: Get apt proxy file contents
       ansible.builtin.command:
         cmd: "cat /etc/apt/apt.conf.d/01apt-cacher-ng-proxy"
       register: acng_output
       changed_when: false
-      when: ansible_os_family == "Debian"
+      when:
+        - ansible_os_family == "Debian"
+        - cybera_acng_server | default('') | length > 0
 
-    - name: Verify acng is configured correctly
+    - name: Verify the apt proxy points at the configured server
       ansible.builtin.assert:
         that:
-          - "'Acquire::http { Proxy \"http://acng-yyc.cloud.cybera.ca:3142\"; };' in acng_output.stdout"
-      when: ansible_os_family == "Debian"
+          - "'Acquire::http { Proxy \"http://' ~ cybera_acng_server ~ ':3142\"; };' in acng_output.stdout"
+      when:
+        - ansible_os_family == "Debian"
+        - cybera_acng_server | default('') | length > 0
 
     # Confirm dotfiles
     - name: Check if tmux.conf.mcjones exists

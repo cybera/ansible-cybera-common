@@ -32,7 +32,11 @@ cybera_packages_redhat_global:
 cybera_packages_redhat:
   which: present
 
-cybera_acng_server: "acng-yyc.cloud.cybera.ca"
+# Empty on purpose. The role writes /etc/apt/apt.conf.d/01apt-cacher-ng-proxy when
+# this is set, and every apt fetch after that goes through the cache. A CI runner
+# cannot reach acng-yyc.cloud.cybera.ca:3142, so the iptables-persistent install in
+# converge died with "connection timed out" against the proxy.
+cybera_acng_server: ""
 
 cybera_ssh_public_keys:
   foo_key:
